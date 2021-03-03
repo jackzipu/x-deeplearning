@@ -20,8 +20,8 @@ import argparse
 import json
 import subprocess
 
-from generator import Generator
-from cluster import Cluster
+from .generator import Generator
+from .cluster import Cluster
 
 
 def hdfs_download(url, dst):
@@ -96,7 +96,7 @@ def train(config):
   model_embed = os.path.join(data_dir, 'model.embed')
   tree_upload_dir = os.path.join(config['upload_url'], os.path.split(data_dir)[-1])
   for i in range(config['epocs']):
-    print('Training, iteration: {iteration}'.format(iteration=i))
+    print(('Training, iteration: {iteration}'.format(iteration=i)))
 
     # TODO(genbao.cgb): Train with xdl
 

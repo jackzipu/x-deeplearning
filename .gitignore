@@ -1,0 +1,11 @@
+xdl/build
+2to3_warning.txt
+xdl/test/util/hdfs_define.h
+xdl/test/util/zookeeper_define.h
+xdl/third_party/seastar/service/build_script/CMakeCache.txt
+xdl/third_party/seastar/service/build_script/CMakeFiles/
+xdl/third_party/seastar/service/build_script/Makefile
+xdl/third_party/seastar/service/build_script/cmake_install.cmake
+xdl/third_party/seastar/service/build_script/libps_network_shared.so
+xdl/third_party/seastar/service/build_script/libps_network_static.a
+xdl/third_party/tbb/cmake/TBBConfig.cmake

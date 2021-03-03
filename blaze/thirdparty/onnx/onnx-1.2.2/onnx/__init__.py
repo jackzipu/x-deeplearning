@@ -1,7 +1,7 @@
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
+
+
+
+
 
 from .onnx_pb import *  # noqa
 from .version import version as __version__  # noqa
@@ -14,11 +14,12 @@ import onnx.defs  # noqa
 import google.protobuf.message
 
 from typing import Union, Text, IO, Optional, cast, TypeVar, Any
+import collections
 
 
 # f should be either readable or a file path
 def _load_bytes(f):  # type: (Union[IO[bytes], Text]) -> bytes
-    if hasattr(f, 'read') and callable(cast(IO[bytes], f).read):
+    if hasattr(f, 'read') and isinstance(cast(IO[bytes], f).read, collections.Callable):
         s = cast(IO[bytes], f).read()
     else:
         with open(cast(Text, f), 'rb') as readable:
@@ -29,7 +30,7 @@ def _load_bytes(f):  # type: (Union[IO[bytes], Text]) -> bytes
 # str should be bytes,
 # f should be either writable or a file path
 def _save_bytes(str, f):  # type: (bytes, Union[IO[bytes], Text]) -> None
-    if hasattr(f, 'write') and callable(cast(IO[bytes], f).write):
+    if hasattr(f, 'write') and isinstance(cast(IO[bytes], f).write, collections.Callable):
         cast(IO[bytes], f).write(str)
     else:
         with open(cast(Text, f), 'wb') as writable:
@@ -48,7 +49,7 @@ def _serialize(proto):  # type: (Union[bytes, google.protobuf.message.Message]) 
     '''
     if isinstance(proto, bytes):
         return proto
-    elif hasattr(proto, 'SerializeToString') and callable(proto.SerializeToString):
+    elif hasattr(proto, 'SerializeToString') and isinstance(proto.SerializeToString, collections.Callable):
         result = proto.SerializeToString()
         return result
     else:
@@ -73,7 +74,7 @@ def _deserialize(s, proto):  # type: (bytes, _Proto) -> _Proto
     if not isinstance(s, bytes):
         raise ValueError('Parameter s must be bytes, but got type: {}'.format(type(s)))
 
-    if not (hasattr(proto, 'ParseFromString') and callable(proto.ParseFromString)):
+    if not (hasattr(proto, 'ParseFromString') and isinstance(proto.ParseFromString, collections.Callable)):
         raise ValueError('No ParseFromString method is detected. '
                          '\ntype is {}'.format(type(proto)))
 

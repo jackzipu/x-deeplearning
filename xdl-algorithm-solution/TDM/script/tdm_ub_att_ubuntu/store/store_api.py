@@ -30,7 +30,7 @@ if version_info >= (2,6,0):
         try:
             fp, pathname, description = imp.find_module('_store_api', [dirname(__file__)])
         except ImportError:
-            import _store_api
+            from . import _store_api
             return _store_api
         if fp is not None:
             try:
@@ -41,7 +41,7 @@ if version_info >= (2,6,0):
     _store_api = swig_import_helper()
     del swig_import_helper
 else:
-    import _store_api
+    from . import _store_api
 del version_info
 try:
     _swig_property = property
@@ -105,7 +105,7 @@ class SwigPyIterator(_object):
     def distance(self, *args): return _store_api.SwigPyIterator_distance(self, *args)
     def equal(self, *args): return _store_api.SwigPyIterator_equal(self, *args)
     def copy(self): return _store_api.SwigPyIterator_copy(self)
-    def next(self): return _store_api.SwigPyIterator_next(self)
+    def __next__(self): return _store_api.SwigPyIterator_next(self)
     def __next__(self): return _store_api.SwigPyIterator___next__(self)
     def previous(self): return _store_api.SwigPyIterator_previous(self)
     def advance(self, *args): return _store_api.SwigPyIterator_advance(self, *args)
@@ -127,7 +127,7 @@ class _string_list(_object):
     __repr__ = _swig_repr
     def iterator(self): return _store_api._string_list_iterator(self)
     def __iter__(self): return self.iterator()
-    def __nonzero__(self): return _store_api._string_list___nonzero__(self)
+    def __bool__(self): return _store_api._string_list___nonzero__(self)
     def __bool__(self): return _store_api._string_list___bool__(self)
     def __len__(self): return _store_api._string_list___len__(self)
     def pop(self): return _store_api._string_list_pop(self)

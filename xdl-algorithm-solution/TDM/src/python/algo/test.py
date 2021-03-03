@@ -26,7 +26,7 @@ from dist_tree import DistTree
 s = Store('')
 s.load('mock_tree.pb')
 
-print(repr(s.get(struct.pack('L', 0)[::-1])))
+print((repr(s.get(struct.pack('L', 0)[::-1]))))
 
 tree = DistTree()
 tree.set_store(s.get_handle())
@@ -41,7 +41,7 @@ top = pybind.GetIOP("TDMOP")
 #dop = pybind.GetIOP("DebugOP")
 
 data_io = pybind.DataIO("ttt", 1024, pybind.FSType.local, 3)
-print data_io
+print(data_io)
 
 #debug_op = pybind.DebugOP()
 

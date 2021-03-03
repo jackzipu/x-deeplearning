@@ -1,7 +1,7 @@
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
+
+
+
+
 
 import numpy as np  # type: ignore
 
@@ -24,7 +24,7 @@ class Reshape(Base):
         }
         data = np.random.random_sample(original_shape).astype(np.float32)
 
-        for test_name, shape in test_cases.items():
+        for test_name, shape in list(test_cases.items()):
             node = onnx.helper.make_node(
                 'Reshape',
                 inputs=['data', 'shape'],

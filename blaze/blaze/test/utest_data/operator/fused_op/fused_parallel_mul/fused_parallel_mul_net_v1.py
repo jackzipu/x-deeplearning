@@ -24,6 +24,6 @@ b = [[[1.2, 2.4],
       [0.3, 1.2]],
     ]
 
-print np.multiply(a[0], b[0])
-print np.multiply(a[1], b[1])
+print(np.multiply(a[0], b[0]))
+print(np.multiply(a[1], b[1]))
 

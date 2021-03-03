@@ -13,9 +13,9 @@
 # limitations under the License.
 # ==============================================================================
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+
+
+
 
 import contextlib
 
@@ -25,6 +25,7 @@ from xdl.python.lib.graph import control_dependencies
 from xdl.python.backend.model_scope import cur_model_scope
 from xdl.python.utils.collections import *
 from xdl.python.lib.tensor import register_converter
+import collections
 
 class VarType:
   Hash128 = "hash128"
@@ -169,7 +170,7 @@ class Variable(object):
       raise Exception('initalizer not specified')
 
     extra_info = ''
-    for k,v in self._extra_info.items():
+    for k,v in list(self._extra_info.items()):
       extra_info += '%s=%s;' % (k, v)
     if self._vtype == VarType.Hash64:
       extra_info += 'hash64=true;'
@@ -183,7 +184,7 @@ class Variable(object):
     import xdl.python.ops.initializer as initializer
     if not isinstance(self._initializer, initializer.Initializer):
       self._init_value = self._initializer
-      if callable(self._initializer):
+      if isinstance(self._initializer, collections.Callable):
         self._init_value = self._initializer()
 
       import xdl.python.lib.tensor as tensor
@@ -218,7 +219,7 @@ class Variable(object):
     self._value = self.pull_value
 
     if self._regularizer is not None:
-      if not callable(self._regularizer):
+      if not isinstance(self._regularizer, collections.Callable):
         raise Exception('regularizer not callable')
       self._regularizer_loss = self._regularizer(self)
       add_to_collection(REGULARIZER_LOSS, self._regularizer_loss, self._scope)

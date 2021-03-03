@@ -22,7 +22,7 @@ import json
 import random
 import argparse
 import time
-from __future__ import print_function
+
 
 import os
 import sys
@@ -72,7 +72,7 @@ class Generator:
         self.dump_parameters()
 
         behavior_dict, train_sample, test_sample = self._read()
-        print(repr(behavior_dict))
+        print((repr(behavior_dict)))
         stat = self._gen_train_sample(train_sample)
         # write probality stat file
         with open(self.stat_file, "wb") as f:
@@ -83,18 +83,18 @@ class Generator:
 
     def dump_parameters(self):
         print("\n------------------- Parameters -------------------------")
-        print("train_data_file: {}".format(self.train_data_file))
-        print("test_data_file: {}".format(self.test_data_file))
-        print("tree_pb_file: {}".format(self.tree_pb_file))
-        print("train_sample_file: {}".format(self.train_sample_file))
-        print("test_sample_file: {}".format(self.test_sample_file))
-        print("seq_len: {}".format(self.seq_len))
-        print("min_seq_len: {}".format(self.min_seq_len))
-        print("parall: {}".format(self.parall))
-        print("stat_file: {}".format(self.stat_file))
-        print("feature_conf: {}".format(self.feature_conf))
-        print("train_id_label: {}".format(self.train_id_label))
-        print("test_id_label: {}".format(self.test_id_label))
+        print(("train_data_file: {}".format(self.train_data_file)))
+        print(("test_data_file: {}".format(self.test_data_file)))
+        print(("tree_pb_file: {}".format(self.tree_pb_file)))
+        print(("train_sample_file: {}".format(self.train_sample_file)))
+        print(("test_sample_file: {}".format(self.test_sample_file)))
+        print(("seq_len: {}".format(self.seq_len)))
+        print(("min_seq_len: {}".format(self.min_seq_len)))
+        print(("parall: {}".format(self.parall)))
+        print(("stat_file: {}".format(self.stat_file)))
+        print(("feature_conf: {}".format(self.feature_conf)))
+        print(("train_id_label: {}".format(self.train_id_label)))
+        print(("test_id_label: {}".format(self.test_id_label)))
         print("--------------------------------------------------------\n")
 
     def _read(self):
@@ -108,14 +108,14 @@ class Generator:
         timestamp = list()
 
         start = time.time()
-        itobj = zip([self.train_data_file, self.test_data_file],
-                    [train_sample, test_sample])
+        itobj = list(zip([self.train_data_file, self.test_data_file],
+                    [train_sample, test_sample]))
         for filename, sample in itobj:
             with open(filename, 'rb') as f:
                 for line in f:
                     arr = line.strip().split(',')
                     if len(arr) != 5:
-                        print('Invalid data format: ' + line)
+                        print(('Invalid data format: ' + line))
                         break
                     user_id.append(int(arr[0]))
                     item_id.append(int(arr[1]))
@@ -134,10 +134,10 @@ class Generator:
                 rating = []
                 timestamp = []
 
-        print("Read data done, {} train records, {} test records"
+        print(("Read data done, {} train records, {} test records"
               ", elapsed: {}".format(len(train_sample["USERID"]),
                                      len(test_sample["USERID"]),
-                                     time.time() - start))
+                                     time.time() - start)))
         return behavior_dict, train_sample, test_sample
 
     def _partial_gen_train_sample(self, users,
@@ -178,9 +178,9 @@ class Generator:
 
     def _gen_train_sample(self, train_sample):
         user_his_behav = self._gen_user_his_behave(train_sample)
-        print("user_his_behav len: {}".format(len(user_his_behav)))
+        print(("user_his_behav len: {}".format(len(user_his_behav))))
 
-        users = user_his_behav.keys()
+        users = list(user_his_behav.keys())
         process = []
         pipes = []
         parall = self.parall
@@ -203,7 +203,7 @@ class Generator:
         stat = dict()
         for pipe in pipes:
             st = pipe.recv()
-            for k, v in st.items():
+            for k, v in list(st.items()):
                 if k not in stat:
                     stat[k] = 0
                 stat[k] += v
@@ -255,14 +255,14 @@ class Generator:
 
     def _gen_user_his_behave(self, train_sample):
         user_his_behav = dict()
-        iterobj = zip(train_sample["USERID"],
-                      train_sample["ITEMID"], train_sample["TS"])
+        iterobj = list(zip(train_sample["USERID"],
+                      train_sample["ITEMID"], train_sample["TS"]))
         for user_id, item_id, ts in iterobj:
             if user_id not in user_his_behav:
                 user_his_behav[user_id] = list()
             user_his_behav[user_id].append((item_id, ts))
 
-        for _, value in user_his_behav.items():
+        for _, value in list(user_his_behav.items()):
             value.sort(key=lambda x: x[1])
 
         return user_his_behav
@@ -270,7 +270,7 @@ class Generator:
     def _gen_test_sample(self, test_sample):
         user_his_behav = self._gen_user_his_behave(test_sample)
         with open(self.test_sample_file, 'wb') as f:
-            for user, value in user_his_behav.items():
+            for user, value in list(user_his_behav.items()):
                 if len(value) / 2 + 1 < self.min_seq_len:
                     continue
 
@@ -312,7 +312,7 @@ class Generator:
         items = []
         item_id_set = set()
         for sample in [train_sample, test_sample]:
-            iterobj = zip(sample["ITEMID"], sample["CATID"])
+            iterobj = list(zip(sample["ITEMID"], sample["CATID"]))
             for item_id, cat_id in iterobj:
                 if item_id not in item_id_set:
                     item_id_set.add(item_id)

@@ -24,7 +24,7 @@ def hash_filter(var_name, fdef, func_name, payload={}):
   if f_args.keywords is not None or f_args.varargs is not None:
     raise ValueError("function should not have varargs or keywords")
   f_args = f_args.args
-  payload_name = payload.keys()
+  payload_name = list(payload.keys())
   payload_value = [payload[i] for i in payload_name]
   return internal_ops.ps_filter_op(payload_value, var_name, func_def, func_name, ";".join(f_args), ";".join(payload_name))
 
@@ -36,6 +36,6 @@ def hash_slot_filter(var_name, fdef, func_name, slot_name, slot_size, payload={}
   if f_args.keywords is not None or f_args.varargs is not None:
     raise ValueError("function should not have varargs or keywords")
   f_args = f_args.args
-  payload_name = payload.keys()
+  payload_name = list(payload.keys())
   payload_value = [payload[i] for i in payload_name]
   return internal_ops.ps_slot_filter_op(payload_value, var_name, func_def, func_name, ";".join(f_args), ";".join(payload_name), slot_name, slot_size)

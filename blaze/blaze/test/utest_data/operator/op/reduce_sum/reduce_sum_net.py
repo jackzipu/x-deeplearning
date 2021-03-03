@@ -8,4 +8,4 @@ a = [[[0.1, 0.2],
       [0.9, 1.0],
       [1.1, 1.2]]]
 
-print np.sum(a, axis=1) 
+print(np.sum(a, axis=1)) 

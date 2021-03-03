@@ -17,7 +17,7 @@ import sys
 import json
 
 if len(sys.argv) < 4:
-  print('{} <train_file> <test_file> <category_file>'.format(sys.argv[0]))
+  print(('{} <train_file> <test_file> <category_file>'.format(sys.argv[0])))
   sys.exit(-1)
 
 train_file = sys.argv[1]

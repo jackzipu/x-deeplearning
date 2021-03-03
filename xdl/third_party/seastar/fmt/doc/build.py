@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # Build the documentation.
 
-from __future__ import print_function
+
 import errno, os, shutil, sys, tempfile
 from subprocess import check_call, check_output, CalledProcessError, Popen, PIPE
 from distutils.version import LooseVersion

@@ -7,7 +7,7 @@ Usage:
   manage.py site
 """
 
-from __future__ import print_function
+
 import datetime, docopt, fileinput, json, os
 import re, requests, shutil, sys, tempfile
 from contextlib import contextmanager
@@ -157,7 +157,7 @@ def update_site(env):
                          include_dir=include_dir, work_dir=env.build_dir)
         shutil.rmtree(os.path.join(html_dir, '.doctrees'))
         # Create symlinks for older versions.
-        for link, target in {'index': 'contents', 'api': 'reference'}.items():
+        for link, target in list({'index': 'contents', 'api': 'reference'}.items()):
             link = os.path.join(html_dir, link) + '.html'
             target += '.html'
             if os.path.exists(os.path.join(html_dir, target)) and \

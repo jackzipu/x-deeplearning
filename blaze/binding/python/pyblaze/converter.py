@@ -1,5 +1,5 @@
 # coding: utf-8
-from __future__ import absolute_import
+
 import ctypes
 
 from .base import LIB, check_call, c_str, c_array
@@ -41,7 +41,7 @@ def Convert2Blaze(model_conf_path,
     """
     x_type_key = []
     x_type_value = []
-    for key, value in x_type.iteritems():
+    for key, value in x_type.items():
       x_type_key.append(c_str(key))
       x_type_value.append(value)
 

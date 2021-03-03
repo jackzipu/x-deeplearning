@@ -49,8 +49,8 @@ def get(old,wc,rc,cc):
 
 def fmt(op, ev, old, wc, rc, cc):
     entry = "{ %s, %s },"%(op, ev)
-    print "\t/* old=%3s, write:%3s, read:%3s, close:%3s */\n\t%s" % (
-        old, wc, rc, cc, entry)
+    print("\t/* old=%3s, write:%3s, read:%3s, close:%3s */\n\t%s" % (
+        old, wc, rc, cc, entry))
     return len(entry)
 
 for old in ('0','r','w','rw','c','cr','cw','crw'):

@@ -105,7 +105,7 @@ def to_tf_segment_id(seg):
   segx = seg.tolist()
   z = 0
   for i in range(len(segx)):
-    l += range(z, segx[i])
+    l += list(range(z, segx[i]))
     z = segx[i]
   return np.array(l, np.int32)
 
@@ -145,6 +145,6 @@ def run():
   while not sess.should_stop():
     values = sess.run(run_ops)
     if values is not None:
-      print 'loss: ', values[0]
+      print('loss: ', values[0])
 
 run()

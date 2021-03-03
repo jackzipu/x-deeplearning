@@ -29,12 +29,12 @@ class DataSharding(object):
             lst = self._fs.dir(path)
             assert len(lst) > 0
             self._full_dirs.append([path, lst])
-            print "data parallel for dir: ", path
+            print("data parallel for dir: ", path)
         elif self._fs.is_reg(path):
             self._full_paths.append(path)
-            print "data parallel for file: ", path
+            print("data parallel for file: ", path)
         else:
-            print "data parallel for re: ", path
+            print("data parallel for re: ", path)
             fname = os.path.basename(path)
             assert len(fname) > 0
             dname = os.path.dirname(path)
@@ -56,7 +56,7 @@ class DataSharding(object):
 
 
     def add_path(self, path):
-        if isinstance(path, basestring):
+        if isinstance(path, str):
             self._add_path(path)
             return
         for p in path:
@@ -104,7 +104,7 @@ class SwiftSharding(object):
         local_step = worker_step if rank < size - 1 else max_range - start
 
         thread_step = local_step / threads
-        for i in xrange(threads):
+        for i in range(threads):
             thread_start = start + i * thread_step
             thread_local_step = thread_step if i < threads - 1 else local_step - i * thread_step
             thread_client_config = self._client_config + \

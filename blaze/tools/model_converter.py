@@ -1,5 +1,5 @@
 # coding: utf-8
-from __future__ import absolute_import
+
 
 from pyblaze.base import BlazeError
 from pyblaze.converter import Convert2Blaze
@@ -45,7 +45,7 @@ def convert_model(conf_file,
       True if model convert success, else False.
   """
   try:
-    print 'conf_file=', conf_file, ' data_file=',  data_file, ' model_type=', model_type, ' weight_type=', weight_type, ' io_type=', io_type, ' x_type=', x_type, ' out_file=', out_file, ' is_binary=', is_binary
+    print('conf_file=', conf_file, ' data_file=',  data_file, ' model_type=', model_type, ' weight_type=', weight_type, ' io_type=', io_type, ' x_type=', x_type, ' out_file=', out_file, ' is_binary=', is_binary)
 
     Convert2Blaze(conf_file,
                   data_file,
@@ -62,14 +62,14 @@ def convert_model(conf_file,
     return True
 
 def print_help():
-    print 'model_converter.py -c <model_conf_file> -d <model_data_file> -o <output_file> -t <model_type> -w <weight_type> -i <io_type> -x <x_type> -b <binary>'
-    print ''
-    print '       model_type option:'
-    print '            1 -> ULF  2 -> ONNX 3 -> MXNet 4 -> TensorFlow  5 -> XDL 6 -> XDL-ULF'
-    print ''
-    print '       data_type option:'
-    print '            1 -> float32  12 -> float16'
-    print ''
+    print('model_converter.py -c <model_conf_file> -d <model_data_file> -o <output_file> -t <model_type> -w <weight_type> -i <io_type> -x <x_type> -b <binary>')
+    print('')
+    print('       model_type option:')
+    print('            1 -> ULF  2 -> ONNX 3 -> MXNet 4 -> TensorFlow  5 -> XDL 6 -> XDL-ULF')
+    print('')
+    print('       data_type option:')
+    print('            1 -> float32  12 -> float16')
+    print('')
 
 if __name__ == '__main__':
   try:
@@ -121,9 +121,9 @@ if __name__ == '__main__':
                    x_type = x_type,
                    out_file = out_file,
                    is_binary = is_binary):
-    print "convert success"
+    print("convert success")
     sys.exit(0)
   else:
-    print "convert model:", conf_file, " ", data_file, " failed"
+    print("convert model:", conf_file, " ", data_file, " failed")
     sys.exit(1)
 

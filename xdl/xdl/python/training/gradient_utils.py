@@ -13,9 +13,9 @@
 # limitations under the License.
 # ==============================================================================
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+
+
+
 
 from xdl.python.backend.model_scope import cur_model_scope
 
@@ -66,7 +66,7 @@ def add_var_mapping(name, var, scope=None):
   if scope not in _VAR_MAPPING:
     _VAR_MAPPING[scope] = {}
   if name in _VAR_MAPPING[scope]:
-    raise 'duplicate key:', name
+    raise ValueError('duplicate key:', name)
   _VAR_MAPPING[scope][name] = var
 
 def get_var_mapping(key, scope=None):

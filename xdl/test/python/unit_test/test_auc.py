@@ -27,7 +27,7 @@ class TestAuc(unittest.TestCase):
         execute(xdl.variable_registers())
         execute(xdl.global_initializers())
         res = xdl.execute(res)
-        print res
+        print(res)
 
 def suite():
     return unittest.TestLoader().loadTestsFromTestCase(TestAuc)

@@ -49,7 +49,7 @@ class DenseIncreaseStreamHook(Hook):
         global_step = v[0] if isinstance(v, list) else v
         if global_step - self._last_save_step >= self._save_interval:
             inc_version = self._create_version(global_step)
-            print('increase stream at global_step[%d], increase version[%s]' % (global_step, inc_version))
+            print(('increase stream at global_step[%d], increase version[%s]' % (global_step, inc_version)))
             self._saver.increase(inc_version)
             self._last_save_step = global_step
 
@@ -80,7 +80,7 @@ class HashIncreaseStreamHook(Hook):
         global_step = v[0] if isinstance(v, list) else v
         if global_step - self._last_save_step >= self._save_interval:
             inc_version = self._create_version(global_step)
-            print('increase stream at global_step[%d], increase version[%s]' % (global_step, inc_version))
+            print(('increase stream at global_step[%d], increase version[%s]' % (global_step, inc_version)))
             self._saver.increase(inc_version)
             self._last_save_step = global_step
 
@@ -111,7 +111,7 @@ class SparseIncreaseStreamHook(Hook):
         global_step = v[0] if isinstance(v, list) else v
         if global_step - self._last_save_step >= self._save_interval:
             inc_version = self._create_version(global_step)
-            print('increase stream at global_step[%d], increase version[%s]' % (global_step, inc_version))
+            print(('increase stream at global_step[%d], increase version[%s]' % (global_step, inc_version)))
             self._saver.increase(inc_version)
             self._last_save_step = global_step
 

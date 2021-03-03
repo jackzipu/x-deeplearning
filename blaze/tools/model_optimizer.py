@@ -1,5 +1,5 @@
 # coding: utf-8
-from __future__ import absolute_import
+
 
 from pyblaze.base import BlazeError
 from pyblaze.optimizer import Optimize
@@ -8,8 +8,8 @@ import logging
 import sys, getopt
 
 def print_help():
-  print 'model_optimizer -i <infile> -o <ofile> -b <binary>'
-  print ''
+  print('model_optimizer -i <infile> -o <ofile> -b <binary>')
+  print('')
 
 if __name__ == '__main__':
   try:

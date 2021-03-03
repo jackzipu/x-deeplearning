@@ -15,7 +15,7 @@
 
 #/usr/bin/env python
 
-from __future__ import print_function
+
 
 import sys
 import argparse
@@ -23,7 +23,7 @@ import time
 
 import numpy as np
 
-from file_reader import FileReader
+from .file_reader import FileReader
 
 
 class Balancer(object):
@@ -104,7 +104,7 @@ class Balancer(object):
         move_outs = cluster_indexes[i][-moves[i]:]
         cluster_indexes[i] = cluster_indexes[i][:-moves[i]]
         for node_id in move_outs:
-          index =  np.array(range(centers))
+          index =  np.array(list(range(centers)))
           sort_idx = np.argsort(distances[node_id])
           index = index[sort_idx]
           for j in index:

@@ -13,9 +13,9 @@
 # limitations under the License.
 # ==============================================================================
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+
+
+
 
 import os
 import sys
@@ -65,7 +65,7 @@ def recursive_make_placeholder(x, xdl_inputs, tf_inputs):
   global _PLACEHOLDER_INFOS
   if isinstance(x, dict):
     ret = {}
-    for key in x.keys():
+    for key in list(x.keys()):
       ret[key] = recursive_make_placeholder(x[key], xdl_inputs, tf_inputs)
     return ret
   if isinstance(x, (tuple, list)):
@@ -269,7 +269,7 @@ def tf_wrapper(is_training=True, init_grad=None, gpu_memory_fraction=0.5, device
         if is_training:
           loss = targets[0]
           if isinstance(loss, (list, tuple, dict)):
-            raise 'model function must reture loss as first output'
+            raise Exception('model function must reture loss as first output')
           for gear_placeholder in gear_placeholders:
             add_to_collection(BACKPROP_VARS, ("gear_grad", gear_placeholder))
           var_names, gradient_op_names = add_backprop_ops(

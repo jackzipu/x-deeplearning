@@ -24,4 +24,4 @@ item1 = np.multiply(item1, a)
 item2 = np.multiply(sigmoid_normed, a)
 y = np.add(item1, item2)
 
-print y
+print(y)

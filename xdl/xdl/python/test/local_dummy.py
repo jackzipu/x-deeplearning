@@ -33,7 +33,7 @@ data_io.label_count(1)
 #data_io.serialized(True)
 
 embs_len = 4
-for i in xrange(1, embs_len + 1):
+for i in range(1, embs_len + 1):
     name = "item_%d" % i
     data_io.feature(name=name, type=xdl.features.sparse, dim=1)
 data_io.add_path('tdm.dat')
@@ -41,7 +41,7 @@ data_io.startup()
 
 def train():
     batch = data_io.read()
-    print batch 
+    print(batch) 
 
     embs = list()
 
@@ -49,8 +49,8 @@ def train():
         name = "item_%d" % i
         emb = xdl.embedding(name, batch[name], xdl.Ones(), 1, 1000, 'sum', vtype='hash')
         embs.append(emb)
-        print "emb =", name, ", shape =", emb.shape
-    print "origin batch[label].shape =", batch["label"].shape
+        print("emb =", name, ", shape =", emb.shape)
+    print("origin batch[label].shape =", batch["label"].shape)
 
     loss, prop, label, indicator, din, dout, fc1_weight, fc1_bias, fc2_weight, fc2_bias = model(embs, batch["label"], 4, 7)
     train_op=xdl.SGD(0.5).optimize()
@@ -70,7 +70,7 @@ def train():
     while not sess.should_stop():
         if loop_num == 5:
             break
-        print "\n>>>>>>>>>>>> loop_num = %d" % loop_num
+        print("\n>>>>>>>>>>>> loop_num = %d" % loop_num)
         result = sess.run([train_op, loss, prop, batch['label'], label, indicator, din, dout, \
                            batch['item_1'].ids, batch['item_1'].segments, batch['item_1'].values, \
                            batch['item_2'].ids, batch['item_2'].segments, batch['item_2'].values, \
@@ -81,29 +81,29 @@ def train():
                            fc2_weight, fc2_bias, fc2_weight_grad, fc2_bias_grad])
         if result is None:
             break
-        print "loss:", result[-31]
-        print "prop:", result[-30]
-        print "origin label:", result[-29]
-        print "label:", result[-28]
-        print "indicator:", result[-27]
-        print "din:", result[-26] 
-        print "dout:", result[-25]
-        print "item_1: ids=", result[-24], "\n        segments=", result[-23], "\n        values=", result[-22]
-        print "item_2: ids=", result[-21], "\n        segments=", result[-20], "\n        values=", result[-19]
-        print "item_3: ids=", result[-18], "\n        segments=", result[-17], "\n        values=", result[-16]
-        print "item_4: ids=", result[-15], "\n        segments=", result[-14], "\n        values=", result[-13]
-        print "item1_grad", result[-12]
-        print "item2_grad", result[-11]
-        print "item1_grad", result[-10]
-        print "item2_grad", result[-9]
-        print "fc1_weight", result[-8]
-        print "fc1_bias", result[-7]
-        print "fc1_weight_grad", result[-6]
-        print "fc1_bias_grad", result[-5]
-        print "fc2_weight", result[-4]
-        print "fc2_bias", result[-3]
-        print "fc2_weight_grad", result[-2]
-        print "fc2_bias_grad", result[-1]
+        print("loss:", result[-31])
+        print("prop:", result[-30])
+        print("origin label:", result[-29])
+        print("label:", result[-28])
+        print("indicator:", result[-27])
+        print("din:", result[-26]) 
+        print("dout:", result[-25])
+        print("item_1: ids=", result[-24], "\n        segments=", result[-23], "\n        values=", result[-22])
+        print("item_2: ids=", result[-21], "\n        segments=", result[-20], "\n        values=", result[-19])
+        print("item_3: ids=", result[-18], "\n        segments=", result[-17], "\n        values=", result[-16])
+        print("item_4: ids=", result[-15], "\n        segments=", result[-14], "\n        values=", result[-13])
+        print("item1_grad", result[-12])
+        print("item2_grad", result[-11])
+        print("item1_grad", result[-10])
+        print("item2_grad", result[-9])
+        print("fc1_weight", result[-8])
+        print("fc1_bias", result[-7])
+        print("fc1_weight_grad", result[-6])
+        print("fc1_bias_grad", result[-5])
+        print("fc2_weight", result[-4])
+        print("fc2_bias", result[-3])
+        print("fc2_weight_grad", result[-2])
+        print("fc2_bias_grad", result[-1])
         loop_num += 1
 
 @xdl.mxnet_wrapper(is_training=True)
@@ -115,7 +115,7 @@ def model(embs, label1, comm_bs, bs):
     
     ## concat, take
     din = embs[0]
-    for i in xrange(1, len(embs)):
+    for i in range(1, len(embs)):
         din = mx.sym.concat(din, embs[i])
     din = mx.sym.take(din, indicator)
     

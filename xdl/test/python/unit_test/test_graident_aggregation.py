@@ -100,9 +100,9 @@ class GradientAggregationTest(unittest.TestCase):
         id2 = [[0,1],[1,1],[0,2]]
         grad1, grad2 = run("853", "861", "normal", "sgd")
         grad3 = run("872", "872", "aggregate", "sgd")
-        print 'grad1: ', grad1
-        print 'grad2: ', grad2
-        print 'grad3: ', grad3
+        print('grad1: ', grad1)
+        print('grad2: ', grad2)
+        print('grad3: ', grad3)
         self.assertTrue(np.allclose(grad1[1], grad3[1]))
         self.assertTrue(np.allclose(grad1[2] + grad2[1], grad3[2]))
         self.assertTrue(np.allclose(grad1[0] + grad2[2], grad3[0]))

@@ -88,7 +88,7 @@ def run(is_training, files):
                                   batch["label"])
     keys = ['loss', 'ctr_prop', 'ctcvr_prop', 'cvr_prop', 'ctr_label',
             'ctcvr_label', 'cvr_label']
-    run_vars = dict(zip(keys, list(var_list)))
+    run_vars = dict(list(zip(keys, list(var_list))))
 
     hooks = []
     if is_training:
@@ -105,7 +105,7 @@ def run(is_training, files):
     if is_debug > 1:
         print("=========gradients")
         grads = xdl.get_gradients()
-        grads_keys = grads[''].keys()
+        grads_keys = list(grads[''].keys())
         grads_keys.sort()
         for key in grads_keys:
             run_vars.update({"grads {}".format(key): grads[''][key]})
@@ -120,7 +120,7 @@ def run(is_training, files):
         if int(xdl.get_task_index()) == 0:
             from xdl.python.training.saver import Saver
             saver = Saver()
-            print("restore from %s" % ckpt)
+            print(("restore from %s" % ckpt))
             saver.restore(ckpt)
         else:
             time.sleep(120)
@@ -133,12 +133,12 @@ def run(is_training, files):
         ctcvr_auc = Auc('ctcvr')
         cvr_auc = Auc('cvr')
         while not sess.should_stop():
-            print('iter=', itr)
-            values = sess.run(run_vars.values())
+            print(('iter=', itr))
+            values = sess.run(list(run_vars.values()))
             if not values:
                 continue
-            value_map = dict(zip(run_vars.keys(), values))
-            print('loss=', value_map['loss'])
+            value_map = dict(list(zip(list(run_vars.keys()), values)))
+            print(('loss=', value_map['loss']))
             ctr_auc.add(value_map['ctr_prop'], value_map['ctr_label'])
             ctcvr_auc.add(value_map['ctcvr_prop'], value_map['ctcvr_label'])
             cvr_auc.add_with_filter(value_map['cvr_prop'],
@@ -152,11 +152,11 @@ def run(is_training, files):
         ctr_test_auc = Auc('ctr')
         ctcvr_test_auc = Auc('ctcvr')
         cvr_test_auc = Auc('cvr')
-        for i in xrange(test_batch_num):
-            print('iter=', i+1)
-            values = sess.run(run_vars.values())
-            value_map = dict(zip(run_vars.keys(), values))
-            print('test_loss=', value_map['loss'])
+        for i in range(test_batch_num):
+            print(('iter=', i+1))
+            values = sess.run(list(run_vars.values()))
+            value_map = dict(list(zip(list(run_vars.keys()), values)))
+            print(('test_loss=', value_map['loss']))
             ctr_test_auc.add(value_map['ctr_prop'], value_map['ctr_label'])
             ctcvr_test_auc.add(value_map['ctcvr_prop'],
                     value_map['ctcvr_label'])
@@ -220,7 +220,7 @@ def fc(tag, data, in_dim, out_dim, active='prelu', use_bn=False):
     elif active == '':  # no active function in the last layer
         out = dout
     else:
-        print("Unknown activation type %s." % active)
+        print(("Unknown activation type %s." % active))
         exit(1)
 
     return out

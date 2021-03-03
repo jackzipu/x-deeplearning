@@ -273,7 +273,7 @@ def op_generate(opdef):
         builder.append_stmt("return __op.outputs")
     with builder.indent_stmt("except Exception as e:"):
       builder.append_stmt("print")
-      builder.append_stmt("print _func_code['{0}']", opdef.name)
+      builder.append_stmt("print(_func_code['{0}'])", opdef.name)
       builder.append_stmt("raise")
 
   builder.append_stmt("result_func = {0}", func_name)

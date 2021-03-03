@@ -14,5 +14,5 @@ bias = [[0.001, 0.002]]
 
 c = np.matmul(a, b)
 output = np.add(c, bias)
-print output
+print(output)
 

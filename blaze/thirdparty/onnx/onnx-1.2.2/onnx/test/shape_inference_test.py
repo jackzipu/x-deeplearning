@@ -1,7 +1,7 @@
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
+
+
+
+
 
 from onnx import checker, helper, TensorProto, NodeProto, GraphProto, ValueInfoProto, ModelProto
 from onnx.helper import make_node, make_tensor_value_info, make_empty_tensor_value_info

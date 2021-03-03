@@ -78,7 +78,7 @@ def train(is_training=True):
                              namenode="hdfs://your/namenode/hdfs/path:9000", enable_state=False)
 
         feature_count = 69
-        for i in xrange(1, feature_count + 1):
+        for i in range(1, feature_count + 1):
             data_io.feature(name=("item_%s" % i), type=xdl.features.sparse, table=1)
         data_io.feature(name="unit_id_expand", type=xdl.features.sparse, table=0)
 
@@ -91,7 +91,7 @@ def train(is_training=True):
         sharding = xdl.DataSharding(data_io.fs())
         sharding.add_path(data)
         paths = sharding.partition(rank=xdl.get_task_index(), size=xdl.get_task_num())
-        print 'train: sharding.partition() =', paths
+        print('train: sharding.partition() =', paths)
         data_io.add_path(paths)
         iop = xdl.GetIOP("TDMOP")
     else:
@@ -99,7 +99,7 @@ def train(is_training=True):
                              namenode="hdfs://your/namenode/hdfs/path:9000", enable_state=False)
 
         feature_count = 69
-        for i in xrange(1, feature_count + 1):
+        for i in range(1, feature_count + 1):
             data_io.feature(name=("item_%s" % i), type=xdl.features.sparse, table=1)
         data_io.feature(name="unit_id_expand", type=xdl.features.sparse, table=0)
 
@@ -110,7 +110,7 @@ def train(is_training=True):
         base_path = '%s/%s/' % (conf('upload_url'), conf('data_dir'))
         data = base_path + conf('test_sample')
         data_io.add_path(data)
-        print 'predict: add_path =', data
+        print('predict: add_path =', data)
         iop = xdl.GetIOP("TDMPREDICTOP")
         #data_io.finish_delay(True)
     assert iop is not None
@@ -146,7 +146,7 @@ def train(is_training=True):
         feature_add_probability = 0.
     import xdl.python.sparse_engine.embedding as embedding
     emb_name = "item_emb"
-    for i in xrange(1, feature_count + 1):
+    for i in range(1, feature_count + 1):
         #emb_name = "item_%s_emb" % i
         eb = xdl.embedding(emb_name, batch["item_%s" % i], xdl.Normal(stddev=0.001), emb_dim, 50000, emb_combiner, vtype="hash", feature_add_probability=feature_add_probability)
         with xdl.device('GPU'):
@@ -161,7 +161,7 @@ def train(is_training=True):
         # 把用户输入按fea_groups划分窗口，窗口内做avg pooling
         fea_groups = [int(s) for s in fea_groups.split(',')]
         total_group_length = np.sum(np.array(fea_groups))
-        print "fea_groups", fea_groups, "total_group_length", total_group_length, "eb_dim", eb_dim
+        print("fea_groups", fea_groups, "total_group_length", total_group_length, "eb_dim", eb_dim)
         user_input_before_reshape = mx.sym.concat(*user_input)
         user_input = mx.sym.reshape(user_input_before_reshape, shape=(-1, total_group_length, eb_dim))
     
@@ -270,9 +270,9 @@ def train(is_training=True):
     statis_begin_loop = 200
     loop_num = 0
     while not sess.should_stop():
-        print ">>>>>>>>>>>> %d >>>>>>>>>>>" % loop_num
+        print(">>>>>>>>>>>> %d >>>>>>>>>>>" % loop_num)
         begin_time = time.time()
-        for itr in xrange(200):
+        for itr in range(200):
             if is_training:
                 result = sess.run([train_op, xdl.get_collection(xdl.UPDATE_OPS)])
                 #result = sess.run([train_op, xdl.get_collection(xdl.UPDATE_OPS), unit_id_expand_emb])
@@ -280,10 +280,10 @@ def train(is_training=True):
                 result = sess.run([loss, fin, global_step.value])
                 #result = sess.run([loss, fin, ids, global_step.value])
             if result is None:
-                print "result is None, finished success."
+                print("result is None, finished success.")
                 break
             if not is_training:
-                print "global_step =", result[-1]
+                print("global_step =", result[-1])
                 #print "batch['_ids'] =", result[-2]
             #else:
             #   print "unit_id_expand_emb = { mean =", result[-1].mean(), ", std =", result[-1].std(), "}"
@@ -295,7 +295,7 @@ def train(is_training=True):
     if is_training:
         xdl.execute(xdl.ps_synchronize_leave_op(np.array(xdl.get_task_index(), dtype=np.int32)))
         if xdl.get_task_index() == 0:
-            print 'start put item_emb'
+            print('start put item_emb')
             def _string_to_int8(src):
                 return np.array([ord(ch) for ch in src], dtype=np.int8)
             from xdl.python.utils.config import get_ckpt_dir
@@ -308,7 +308,7 @@ def train(is_training=True):
             shell_cmd("hadoop fs -get %s/item_emb data/item_emb" % output_dir)
             shell_cmd("sed -i 's/..//' data/item_emb")
             shell_cmd("hadoop fs -put -f data/item_emb %s" % output_dir)
-            print 'finish put item_emb'
+            print('finish put item_emb')
         #print 'before worker barrier'
         #xdl.execute(xdl.worker_barrier_op(np.array(xdl.get_task_index(), dtype=np.int32), np.array(xdl.get_task_num(), dtype=np.int32)))
         #print 'after worker barrier'

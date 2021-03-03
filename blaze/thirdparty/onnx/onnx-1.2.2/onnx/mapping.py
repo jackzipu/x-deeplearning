@@ -1,7 +1,7 @@
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
+
+
+
+
 
 from onnx import TensorProto
 import numpy as np  # type: ignore
@@ -23,7 +23,7 @@ TENSOR_TYPE_TO_NP_TYPE = {
     TensorProto.UINT64: np.dtype('uint64'),
 }
 
-NP_TYPE_TO_TENSOR_TYPE = {v: k for k, v in TENSOR_TYPE_TO_NP_TYPE.items()}
+NP_TYPE_TO_TENSOR_TYPE = {v: k for k, v in list(TENSOR_TYPE_TO_NP_TYPE.items())}
 
 TENSOR_TYPE_TO_STORAGE_TENSOR_TYPE = {
     TensorProto.FLOAT: TensorProto.FLOAT,

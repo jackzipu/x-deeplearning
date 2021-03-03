@@ -13,9 +13,9 @@
 # limitations under the License.
 # ==============================================================================
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+
+
+
 
 from xdl.python.backend.model_scope import cur_model_scope
 

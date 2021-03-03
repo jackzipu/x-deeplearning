@@ -102,8 +102,8 @@ def train(config):
           fo.write(line)
 
   os.remove(model_embed_tmp)
-  print("Filer embedding done, records:{}, max_leaf_id: {}".format(
-      item_count, max_item_id))
+  print(("Filer embedding done, records:{}, max_leaf_id: {}".format(
+      item_count, max_item_id)))
 
   # Tree clustering
   cluster = Cluster(model_embed, tree_filename,

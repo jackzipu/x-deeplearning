@@ -27,7 +27,7 @@ def main(file, temporary=False):
 
     fd = open(file, "r")
     for l in fd:
-        print >> tf, l.strip("\n")
+        print(l.strip("\n"), file=tf)
     tf.close()
 
     lines = open(tpath, 'r').readlines()
@@ -40,7 +40,7 @@ def main(file, temporary=False):
 
     for l in lines:
         s = l.strip("\n")
-        print >> fd, s
+        print(s, file=fd)
 
     if temporary:
         fd.seek(0)

@@ -60,7 +60,7 @@ def generate_proto(source, require = True):
   if (not os.path.exists(output) or
       (os.path.exists(source) and
        os.path.getmtime(source) > os.path.getmtime(output))):
-    print("Generating %s..." % output)
+    print(("Generating %s..." % output))
 
     if not os.path.exists(source):
       sys.stderr.write("Can't find required file: %s\n" % source)

@@ -19,7 +19,7 @@ import proto.offline_tree_pb2 as offline_tree
 import proto.online_tree_pb2 as online_tree
 
 if len(sys.argv) < 3:
-  print("{command} <input_pb> <head_number>".format(command=sys.argv[0]))
+  print(("{command} <input_pb> <head_number>".format(command=sys.argv[0])))
   sys.exit(-1)
 
 offsets = dict()
@@ -72,9 +72,9 @@ with open(sys.argv[1], 'rb') as f:
 
     read_count += 1
     if read_count % 500000 == 0:
-      print("Read {count} tree nodes".format(count=read_count))
+      print(("Read {count} tree nodes".format(count=read_count)))
 
-print("Read {count} tree nodes".format(count=read_count))
+print(("Read {count} tree nodes".format(count=read_count)))
 print("Read tree nodes end ...")
 
 # Process node sequence
@@ -93,7 +93,7 @@ for level in range(len(levels)):
 nodes_number = len(offsets)
 
 proc_count = 0
-for code, node in code_node_map.items():
+for code, node in list(code_node_map.items()):
   node.seq = offsets[code]
   node.parent = node.seq
   if code > 0:
@@ -110,13 +110,13 @@ for code, node in code_node_map.items():
 
   proc_count += 1
   if proc_count % 500000 == 0:
-    print("Process {count} tree nodes".format(count=proc_count))
+    print(("Process {count} tree nodes".format(count=proc_count)))
 
 meta = online_tree.UIMeta()
-seq_list = range(0, nodes_number)
+seq_list = list(range(0, nodes_number))
 code_seq = [seq_code_map[seq] for seq in seq_list]
 
-print("Process {count} tree nodes".format(count=proc_count))
+print(("Process {count} tree nodes".format(count=proc_count)))
 print("Process tree nodes end ...")
 
 print("Write tree nodes begin ...")

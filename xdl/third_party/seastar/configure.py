@@ -579,7 +579,7 @@ if args.dpdk:
     def update(lines, vars):
         ret = []
         for line in lines:
-            for var, val in vars.items():
+            for var, val in list(vars.items()):
                 if line.startswith(var + '='):
                     line = var + '=' + val + '\n'
             ret.append(line)

@@ -18,7 +18,7 @@ import numpy as np
 import struct
 import os
 import threading
-import Queue
+import queue
 import time
 import datetime
 from xdl.python.framework.session import Hook
@@ -28,6 +28,7 @@ from xdl.python.proto import trace_pb2
 from xdl.python.pybind import get_file_system
 from xdl.python.training.trace import *
 from xdl.python.lib.graph import execute
+import collections
 
 def nptype2trace(np_type):
   if np_type == np.int8:
@@ -116,7 +117,7 @@ class TraceWriter(object):
     self._last_gstep = -1
     self._last_timestamp = -1
 
-    self._queue = Queue.Queue()
+    self._queue = queue.Queue()
     self._thread = TraceWriterThread(self._queue)
     self._thread.start()
 
@@ -326,7 +327,7 @@ class TraceHook(Hook):
       assert len(self._cb_keys) == len(self._cbs)
       assert len(self._once_keys) == len(self._once_values)
 
-    print 'before_run_tensors:', self._values
+    print('before_run_tensors:', self._values)
 
   def __del__(self):
     self.wait_done()
@@ -334,7 +335,7 @@ class TraceHook(Hook):
   def _execute_sparse_assign(self, sparse_ids, sparse_vals):
     assert len(sparse_ids) == len(self._sparse_assign_ids)
     assert len(sparse_vals) == len(self._sparse_assign_values)
-    for i in xrange(len(self._sparse_assign_ids)):
+    for i in range(len(self._sparse_assign_ids)):
       ids = sparse_ids[i]
       values = sparse_vals[i]
       var = self._sparse_assign_vars[i]
@@ -388,7 +389,7 @@ class TraceHook(Hook):
     # execute user summary function
     temp_values = []
     for v, func in zip(values, self._summaries):
-      if callable(func):
+      if isinstance(func, collections.Callable):
         temp_values.append(func(v))
       else:
         temp_values.append(v)
@@ -416,7 +417,7 @@ class TraceHook(Hook):
         self._values.append(var.value)
         break
     if not_found:
-      print('WARNING: variable %s not found to trace' % var_name)
+      print(('WARNING: variable %s not found to trace' % var_name))
 
   def add_tensor(self, value, key):
     self._keys.append(key)

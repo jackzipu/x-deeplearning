@@ -63,14 +63,14 @@ class DataReader(DataIO):
                                          global_schedule=global_schedule)
 
         # add path after failover
-        print self._paths
+        print(self._paths)
 
         self._sharding = DataSharding(self.fs())
         self._sharding.add_path(self._paths)
 
         paths = self._sharding.partition(
             rank=xdl.get_task_index(), size=xdl.get_task_num())
-        print paths
+        print(paths)
 
         self.add_path(paths)
 
@@ -100,6 +100,6 @@ class DataReader(DataIO):
             assert '://' not in path, "Unsupported path: %s" % path
             fpath = path
 
-        print "%s://%s/%s"%(fs_type, namenode, fpath)
+        print("%s://%s/%s"%(fs_type, namenode, fpath))
         return fs_type, namenode, fpath
 

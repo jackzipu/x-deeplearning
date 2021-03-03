@@ -333,7 +333,7 @@ class MacroCollection(object):
       # Nothing to do
       return macro.body
     assert len(arg_values) == len(macro.args)
-    args = dict(zip(macro.args, arg_values))
+    args = dict(list(zip(macro.args, arg_values)))
 
     def _lookupArg(match):
       val = args[match.group('name')]
@@ -366,7 +366,7 @@ class MacroCollection(object):
     return macro_arg_ref_re.sub(_lookupArg, macro.body)
 
   def _EvalMacrosRefs(self, text, macro_stack):
-    macro_ref_re = _MacroRefRe(self._macros.keys())
+    macro_ref_re = _MacroRefRe(list(self._macros.keys()))
 
     def _resolveMacro(match):
       return self._Expand(match, macro_stack)
@@ -688,15 +688,15 @@ def main(args):
 
     if src_file.processed_content != src_file.original_content:
       if not opts.dry_run:
-        print('Updating for "%s".' % a_path)
+        print(('Updating for "%s".' % a_path))
         with open(a_path, 'w') as f:
           f.write(src_file.processed_content)
       else:
         # Special result to indicate things need updating.
-        print('Update needed for "%s".' % a_path)
+        print(('Update needed for "%s".' % a_path))
         result = 1
     elif opts.verbose:
-      print('No update for "%s".' % a_path)
+      print(('No update for "%s".' % a_path))
 
   return result
 

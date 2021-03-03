@@ -1,5 +1,5 @@
 # coding: utf-8
-from __future__ import absolute_import
+
 
 from pyblaze.base import BlazeError
 from pyblaze.qed import sparse2qed_fp32, sparse2qed_fp16
@@ -8,9 +8,9 @@ import logging
 import sys, getopt
 
 def print_help():
-  print 'build_qed -p <path> -i <infile> -o <ofile> -s <precision> -t <threadnum>'
-  print ''
-  print '      precision option: 0 -> fp32 1 -> fp16'
+  print('build_qed -p <path> -i <infile> -o <ofile> -s <precision> -t <threadnum>')
+  print('')
+  print('      precision option: 0 -> fp32 1 -> fp16')
 
 if __name__ == '__main__':
   try:
@@ -46,5 +46,5 @@ if __name__ == '__main__':
   elif precision == 0:
     sparse2qed_fp32(path, i_file, o_file, thread_num)
   else:
-    print 'unkown presicion:', precision
+    print('unkown presicion:', precision)
     sys.exit(1)

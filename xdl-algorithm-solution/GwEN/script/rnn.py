@@ -38,9 +38,9 @@
 @@static_state_saving_rnn
 @@static_bidirectional_rnn
 """
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+
+
+
 
 from tensorflow.python.framework import constant_op
 from tensorflow.python.framework import dtypes
@@ -53,6 +53,7 @@ from tensorflow.python.ops import rnn_cell_impl
 from tensorflow.python.ops import tensor_array_ops
 from tensorflow.python.ops import variable_scope as vs
 from tensorflow.python.util import nest
+import collections
 
 
 # pylint: disable=protected-access
@@ -986,7 +987,7 @@ def raw_rnn(cell, loop_fn,
   """
 
   assert_like_rnncell("cell", cell)
-  if not callable(loop_fn):
+  if not isinstance(loop_fn, collections.Callable):
     raise TypeError("loop_fn must be a callable")
 
   parallel_iterations = parallel_iterations or 32

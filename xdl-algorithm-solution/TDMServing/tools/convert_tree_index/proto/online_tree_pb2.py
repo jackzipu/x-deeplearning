@@ -249,32 +249,27 @@ DESCRIPTOR.message_types_by_name['UIHead'] = _UIHEAD
 DESCRIPTOR.message_types_by_name['UITree'] = _UITREE
 DESCRIPTOR.message_types_by_name['UIMeta'] = _UIMETA
 
-class UINode(message.Message):
-  __metaclass__ = reflection.GeneratedProtocolMessageType
+class UINode(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
   DESCRIPTOR = _UINODE
   
   # @@protoc_insertion_point(class_scope:tdm_serving.UINode)
 
-class UILevel(message.Message):
-  __metaclass__ = reflection.GeneratedProtocolMessageType
+class UILevel(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
   DESCRIPTOR = _UILEVEL
   
   # @@protoc_insertion_point(class_scope:tdm_serving.UILevel)
 
-class UIHead(message.Message):
-  __metaclass__ = reflection.GeneratedProtocolMessageType
+class UIHead(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
   DESCRIPTOR = _UIHEAD
   
   # @@protoc_insertion_point(class_scope:tdm_serving.UIHead)
 
-class UITree(message.Message):
-  __metaclass__ = reflection.GeneratedProtocolMessageType
+class UITree(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
   DESCRIPTOR = _UITREE
   
   # @@protoc_insertion_point(class_scope:tdm_serving.UITree)
 
-class UIMeta(message.Message):
-  __metaclass__ = reflection.GeneratedProtocolMessageType
+class UIMeta(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
   DESCRIPTOR = _UIMETA
   
   # @@protoc_insertion_point(class_scope:tdm_serving.UIMeta)

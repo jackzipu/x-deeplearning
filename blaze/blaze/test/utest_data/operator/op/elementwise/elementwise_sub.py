@@ -11,4 +11,4 @@ a = [[[0.1, 0.2],
 b = np.ones([2], np.float32)
 b = [0.2, 0.3]
 
-print np.subtract(a, b)
+print(np.subtract(a, b))

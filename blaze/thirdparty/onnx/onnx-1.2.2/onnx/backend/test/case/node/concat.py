@@ -1,7 +1,7 @@
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
+
+
+
+
 
 import numpy as np  # type: ignore
 
@@ -24,7 +24,7 @@ class Concat(Base):
                    [[[9, 10], [11, 12]], [[13, 14], [15, 16]]])
         }  # type: Dict[Text, Sequence[Any]]
 
-        for test_case, values_ in test_cases.items():
+        for test_case, values_ in list(test_cases.items()):
             values = [np.asarray(v, dtype=np.float32) for v in values_]
             for i in range(len(values[0].shape)):
                 in_args = ['value' + str(k) for k in range(len(values))]

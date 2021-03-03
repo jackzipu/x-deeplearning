@@ -1,5 +1,6 @@
 import numpy as np
 import blaze_pb2 as b
+from functools import reduce
 
 def sigmoid(a): return 1.0 / (1.0 + np.exp(-a))
 

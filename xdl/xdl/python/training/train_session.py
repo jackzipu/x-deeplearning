@@ -78,7 +78,7 @@ class WorkerFinishHook(Hook):
 
     def after_run(self, v):
         if self._is_chief and v[0] >= math.ceil(self._finish_rate * self._worker_count / 100.0):
-            print("Finish_num is [%ld] limit is [%d], request_stop" % (v[0], math.ceil(self._finish_rate * self._worker_count / 100.0)))
+            print(("Finish_num is [%ld] limit is [%d], request_stop" % (v[0], math.ceil(self._finish_rate * self._worker_count / 100.0))))
             raise OutOfRange("WorkerFinished")
 
     def end(self):
@@ -86,10 +86,10 @@ class WorkerFinishHook(Hook):
         if self._is_chief:
             finish_num = execute(self._op)
             while finish_num < math.ceil(self._finish_rate * self._worker_count / 100.0):
-                print("Finish_num is [%ld] limit is [%d], waiting..." % (finish_num, math.ceil(self._finish_rate * self._worker_count / 100.0)))
+                print(("Finish_num is [%ld] limit is [%d], waiting..." % (finish_num, math.ceil(self._finish_rate * self._worker_count / 100.0))))
                 finish_num = execute(self._op)
                 time.sleep(10)
-            print("Finish_num is [%ld] limit is [%d], exiting..." % (finish_num, math.ceil(self._finish_rate * self._worker_count / 100.0)))
+            print(("Finish_num is [%ld] limit is [%d], exiting..." % (finish_num, math.ceil(self._finish_rate * self._worker_count / 100.0))))
 
 class SemiSyncRunHook(Hook):
     def __init__(self, index, worker_count, staleness=0):
@@ -250,7 +250,7 @@ def execute_with_retry(ops, retry_cnt=6):
             i = i + 1
             if i == retry_cnt:
                 raise e
-            print('run ops:', ops, ' fail, retry cnt:', i)
+            print(('run ops:', ops, ' fail, retry cnt:', i))
             time.sleep(10)
             _restart_client()
 
@@ -274,7 +274,7 @@ class WorkerHook(Hook):
                 if inited == [1]:
                     var_set.remove(var)
                 else:
-                    print('waiting for initialize variable[%s]' % var.name)
+                    print(('waiting for initialize variable[%s]' % var.name))
             if is_local_mode():
                 time.sleep(0.1)
             else:
@@ -366,10 +366,10 @@ class TrainSession(object):
                     self._session = SimpleSession(self._hooks)
             return self._session.run(v, run_option, run_statistic)
         except (PsError) as e:
-            print('An error was raised. This may be due to a preemption in '
+            print(('An error was raised. This may be due to a preemption in '
                   'a connected worker or parameter server. The current '
                   'session will be closed and a new session will be '
-                  'created. Error: %s', str(e))
+                  'created. Error: %s', str(e)))
             time.sleep(5)
             self._session = None
         except OutOfRange:

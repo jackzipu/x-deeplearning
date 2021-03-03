@@ -55,10 +55,10 @@ class mx_dnn_layer(object):
         self.w = mx.sym.var(name='fc_w_%s' % self.version, init=Identity(init_value=init_value.tolist()))
         self.b = mx.sym.var(name='fc_b_%s' % self.version, init=mx.init.Constant(0.1))
         self.out = mx.symbol.FullyConnected(data=bottom_data, name=('fc_%s' % self.version), num_hidden=self.output_dim, weight=self.w, bias=self.b)
-        print "if mx.symbol.FullyConnected"
+        print("if mx.symbol.FullyConnected")
 
         if self.use_batch_norm:
-            print "if self.use_batch_norm:"
+            print("if self.use_batch_norm:")
             # BatchNorm Param
             self.bn_gamma = mx.sym.var(name='bn_gamma_1_%s' % self.version, shape=(self.output_dim, ), init=mx.init.Constant(1.))
             self.bn_bias = mx.sym.var(name='bn_bias_1_%s' % self.version, shape=(self.output_dim, ), init=mx.init.Constant(0.))
@@ -69,7 +69,7 @@ class mx_dnn_layer(object):
             self.out = mx.symbol.BatchNorm(data=self.out, fix_gamma=False, name=('bn_%s' % self.version), gamma=self.bn_gamma, beta=self.bn_bias)
 
         if self.active_op == 'prelu':
-            print "if self.active_op == 'prelu':"
+            print("if self.active_op == 'prelu':")
             self.alpha = mx.sym.var(name='alpha_1_%s' % self.version, shape=(self.output_dim, ), init=mx.init.Constant(0.25))
             self.out = mx.symbol.LeakyReLU(data=self.out, act_type='prelu', slope=-0.25, name=('prelu_%s' % self.version), gamma=self.alpha)
 
@@ -90,7 +90,7 @@ class FullyConnected3D(object):
         
     def call(self, bottom_data):
 
-        print "call FullyConnected3D"
+        print("call FullyConnected3D")
         init_mean = 0.0
         init_stddev = 1. 
         init_value = (init_stddev * np.random.randn(1, self.input_dim, self.output_dim).astype(np.float32) + init_mean) / np.sqrt(self.input_dim)
@@ -104,7 +104,7 @@ class FullyConnected3D(object):
         net_dot = mx.symbol.broadcast_plus(lhs=net_dot, rhs=self.bias)
 
         if self.active_op == 'prelu':
-            print "in FullyConnected3D use prelu"
+            print("in FullyConnected3D use prelu")
             self.alpha = mx.sym.var(name='alpha_1_%s' % self.version, shape=(1, 1, self.output_dim), init=mx.init.Constant(0.25)) 
             r1 = mx.symbol.Activation(data=net_dot, act_type='relu')
             r2 = mx.symbol.Activation(data=-net_dot, act_type='relu')

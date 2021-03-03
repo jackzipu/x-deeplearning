@@ -16,7 +16,7 @@
 # -*-coding:utf-8 -*-
 import random
 
-print "helloWorld"
+print("helloWorld")
 
 split_num = 20
 origin_sample_path = "movielens_train_sample_uniq_groupkey.dat"
@@ -25,8 +25,8 @@ origin_sample_path = "movielens_train_sample_uniq_groupkey.dat"
 file_sample_num = []
 foutputs = []
 split_file_paths = []
-for i in xrange(0, split_num):
-    print "Create File ", origin_sample_path + "_%i.dat" % i
+for i in range(0, split_num):
+    print("Create File ", origin_sample_path + "_%i.dat" % i)
     split_file_paths.append(origin_sample_path + "_%i.dat" % i)
     foutputs.append(open(origin_sample_path + "_%i.dat" % i, "w"))
     file_sample_num.append(0)
@@ -43,15 +43,15 @@ with open(origin_sample_path) as finput:
 
         sp += 1
         if sp % 10000 == 0:
-            print "sp ", sp
+            print("sp ", sp)
 
 # 将各个文件关闭
-for i in xrange(0, split_num):
+for i in range(0, split_num):
     foutputs[i].close()
 
 # 重新读入各个文件，在文件内shuffle
-for i in xrange(0, split_num):
-    print "shuffling file", i, "start"
+for i in range(0, split_num):
+    print("shuffling file", i, "start")
     samples = []
     with open(split_file_paths[i]) as finput:
         for line in finput:
@@ -64,6 +64,6 @@ for i in xrange(0, split_num):
         fouput.write(line)
 
     fouput.close()
-    print "shuffling file", i, "end"
+    print("shuffling file", i, "end")
 
-print "end"
+print("end")

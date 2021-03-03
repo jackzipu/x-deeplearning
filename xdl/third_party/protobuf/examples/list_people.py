@@ -2,7 +2,7 @@
 
 # See README.txt for information and build instructions.
 
-from __future__ import print_function
+
 import addressbook_pb2
 import sys
 

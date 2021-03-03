@@ -1,7 +1,7 @@
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
+
+
+
+
 
 import collections
 import numbers
@@ -100,7 +100,7 @@ def make_model(graph, **kwargs):  # type: (GraphProto, **Any) -> ModelProto
         imp = model.opset_import.add()
         imp.version = defs.onnx_opset_version()
 
-    for k, v in kwargs.items():
+    for k, v in list(kwargs.items()):
         # TODO: Does this work with repeated fields?
         setattr(model, k, v)
     return model
@@ -108,7 +108,7 @@ def make_model(graph, **kwargs):  # type: (GraphProto, **Any) -> ModelProto
 
 def set_model_props(model, dict_value):  # type: (ModelProto, Dict[Text, Text]) -> None
     del model.metadata_props[:]
-    for (k, v) in dict_value.items():
+    for (k, v) in list(dict_value.items()):
         entry = model.metadata_props.add()
         entry.key = k
         entry.value = v
