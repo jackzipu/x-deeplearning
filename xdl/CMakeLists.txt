@@ -109,7 +109,7 @@ ENDIF()
 IF (USE_GPU)
    set(XDL_CORE_DEPEND_LIB libprotobuf ${PS_LIBRARYS} ${BACKEND_LIB} python2.7 cudart dl ${TBB_IMPORTED_TARGETS})
 ELSE ()
-   set(XDL_CORE_DEPEND_LIB libprotobuf ${PS_LIBRARYS} ${BACKEND_LIB} python2.7 dl ${TBB_IMPORTED_TARGETS})
+   set(XDL_CORE_DEPEND_LIB libprotobuf ${PS_LIBRARYS} ${BACKEND_LIB} python3.5m dl ${TBB_IMPORTED_TARGETS})
 ENDIF ()
 
 set(XDL_IO_DEPEND_LIB dl rdkafka++ jsoncpp)
