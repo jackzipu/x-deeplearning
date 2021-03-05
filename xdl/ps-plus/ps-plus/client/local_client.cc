@@ -13,6 +13,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
+#include <cmath>
 #include "ps-plus/client/local_client.h"
 #include "ps-plus/client/partitioner/dense.h"
 #include "ps-plus/client/partitioner/logic.h"

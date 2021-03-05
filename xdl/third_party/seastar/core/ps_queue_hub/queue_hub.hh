@@ -1,6 +1,7 @@
 #ifndef ML_PS5_NETWORK_QUEUE_HUB_H
 #define ML_PS5_NETWORK_QUEUE_HUB_H
 
+#include <signal.h>
 #include <iostream>
 #include <string>
 #include <memory>

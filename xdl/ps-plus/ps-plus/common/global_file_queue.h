@@ -16,6 +16,7 @@ limitations under the License.
 #ifndef PS_SCHEDULER_GLOBAL_FILE_QUEUE_H_
 #define PS_SCHEDULER_GLOBAL_FILE_QUEUE_H_
 
+#include <vector>
 #include <chrono>
 #include <functional>
 #include <map>

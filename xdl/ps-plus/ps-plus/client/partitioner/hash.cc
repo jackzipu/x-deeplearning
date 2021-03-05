@@ -13,6 +13,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
+#include <cmath>
 #include "ps-plus/client/partitioner/hash.h"
 #include "ps-plus/common/tensor_shape.h"
 #include "ps-plus/common/types.h"
