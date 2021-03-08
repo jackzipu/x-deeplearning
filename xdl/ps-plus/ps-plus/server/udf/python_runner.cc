@@ -52,7 +52,7 @@ class PythonContext {
       Py_Initialize();
       PyRun_SimpleString("import traceback");
       PyRun_SimpleString("import numpy");
-      import_array();
+      import_array_1();
       PyObject* mainModule = PyImport_ImportModule("__main__" );
       PyObject* dict = PyModule_GetDict(mainModule);
       PyObject* traceback = PyDict_GetItemString(dict, "traceback");
@@ -66,6 +66,9 @@ class PythonContext {
     }
     PyErr_Clear();
   }
+  int import_array_1(){
+    import_array();
+  }
   std::string getException() {
     PyObject *ptype = nullptr, *pvalue = nullptr, *ptraceback = nullptr, *pstr;
     PyErr_Fetch(&ptype, &pvalue, &ptraceback);
@@ -77,9 +80,9 @@ class PythonContext {
     } else {
       pstr = PyObject_CallFunction(format_exception_only, "OO", ptype, pvalue);
     }
-    PyObject* slash_n = PyString_FromString("\n");
+    PyObject* slash_n = PyBytes_FromString("\n");
     pstr = PyObject_CallMethod(slash_n, "join", "O", pstr);
-    char *pStrErrorMessage = PyString_AsString(pstr);
+    char *pStrErrorMessage = PyBytes_AsString(pstr);
     PyErr_Clear();
     return pStrErrorMessage;
   }
