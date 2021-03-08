@@ -22,12 +22,12 @@ def on_meta(path):
     with open(path) as fob:
         contents = fob.read()
 
-        print len(contents)
+        print(len(contents))
 
         sm = io.SampleMeta()
         sm.ParseFromString(contents)
 
-        print sm
+        print(sm)
 
 def on_data(path, count):
     with open(path) as fob:
@@ -40,12 +40,12 @@ def on_data(path, count):
             contents = fob.read(size)
             sg.ParseFromString(contents)
 
-            print sg
-            print "\n"
+            print(sg)
+            print("\n")
 
 
 if len(sys.argv) < 2:
-    print "Usage: %s <path> [count=1]"
+    print("Usage: %s <path> [count=1]")
     sys.exit(1)
 
 path = sys.argv[1]

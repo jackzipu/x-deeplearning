@@ -135,7 +135,7 @@ class DistributedEnv(Env):
       self._model_server_num = get_model_server_num()
     for i in range(len(self._model_server)):
       set_model_server_id(self._model_server[i], i + 1)
-    self._model_server_num_dict = dict(zip(self._model_server, self._model_server_num))
+    self._model_server_num_dict = dict(list(zip(self._model_server, self._model_server_num)))
 
     if self._task_name != "worker":
       config = get_config("streaming_output")
@@ -208,7 +208,7 @@ class DistributedEnv(Env):
     while True:
       try:
         while True:
-          print "RESTARTING CLIENT"
+          print("RESTARTING CLIENT")
           if restart_client():
             break
           time.sleep(10)

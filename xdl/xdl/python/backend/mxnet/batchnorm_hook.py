@@ -48,8 +48,8 @@ def BatchNormWrapper(data=None, gamma=None,
     eps = 1e-3
   var = (1/outputs[2]) ** 2 - eps
   aux_list = outputs.list_auxiliary_states()
-  add_to_collection(MXNET_BN_STATISTIC, zip(
-      aux_list[len(aux_list)-2:], [outputs[1], var], [momentum]*2))
+  add_to_collection(MXNET_BN_STATISTIC, list(zip(
+      aux_list[len(aux_list)-2:], [outputs[1], var], [momentum]*2)))
   if output_mean_var == _Null:
     return outputs[0]
   else:
@@ -75,8 +75,8 @@ def BatchNormV1Wrapper(data=None, gamma=None,
                            name=name, attr=attr, 
                            out=out, **kwargs)
   aux_list = outputs.list_auxiliary_states()
-  add_to_collection(MXNET_BN_STATISTIC, zip(
-      aux_list[len(aux_list)-2:], outputs[1:], [momentum]*2))
+  add_to_collection(MXNET_BN_STATISTIC, list(zip(
+      aux_list[len(aux_list)-2:], outputs[1:], [momentum]*2)))
   if output_mean_var == _Null:
     return outputs[0]
   else:

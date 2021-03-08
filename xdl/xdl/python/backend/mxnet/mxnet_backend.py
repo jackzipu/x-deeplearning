@@ -12,9 +12,9 @@
 # limitations under the License.
 # ==============================================================================
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+
+
+
 
 import os
 import sys
@@ -104,12 +104,12 @@ def serialize_graph(symbol):
 def add_variable_inputs(sym, sym_input_dict, is_training):
   arg_shape, _, aux_shape = sym.infer_shape()
   arg_type, _, aux_type = sym.infer_type()
-  arg_shape_type = zip(sym.list_arguments(),
+  arg_shape_type = list(zip(sym.list_arguments(),
                        arg_shape,
-                       arg_type)
-  aux_shape_type = zip(sym.list_auxiliary_states(),
+                       arg_type))
+  aux_shape_type = list(zip(sym.list_auxiliary_states(),
                        aux_shape,
-                       aux_type)
+                       aux_type))
   node_info = json.loads(sym.tojson())["nodes"]
   for item in arg_shape_type:
     import xdl.python.framework.variable as variable
@@ -188,7 +188,7 @@ def get_trace_outputs(sym):
   trace_names = trace.get_names('mxnet')
   trace_syms = trace.get_tensors('mxnet')
   res = []
-  for i in xrange(len(trace_names)):
+  for i in range(len(trace_names)):
     name = trace_names[i]
     sym_name = trace_syms[i].name
     if name in args or name in auxs or sym_name in args or sym_name in auxs:
@@ -201,7 +201,7 @@ def set_trace_outputs(sym_input_dict, outputs):
   trace_names = trace.get_names('mxnet')
   trace_syms = trace.get_tensors('mxnet')
   k = 0
-  for i in xrange(len(trace_names)):
+  for i in range(len(trace_names)):
     name = trace_names[i]
     sym_name = trace_syms[i].name
     if name in sym_input_dict:
@@ -307,7 +307,7 @@ def mxnet_wrapper(device_type='cpu', is_training=True, init_grad=None):
       if bn_var_num > 0:
         bn_outputs = outputs[len(outputs) - bn_var_num:]
         outputs = outputs[0:len(outputs) - bn_var_num]
-        bn_update_infos = zip(bn_var_names, bn_outputs, moments)
+        bn_update_infos = list(zip(bn_var_names, bn_outputs, moments))
         add_to_collection(BN_STATISTIC, bn_update_infos)
         update_ops = []
         for n, v, m in bn_update_infos:

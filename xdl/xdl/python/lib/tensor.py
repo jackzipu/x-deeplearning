@@ -68,7 +68,9 @@ class TensorConverter(object):
     def wrapper(fn):
       convert_map = TensorConverter._convert_map
       convert_map.append((-priority, t, fn))
-      convert_map.sort()
+      def takeFirst(elem):
+        return elem[0]
+      convert_map.sort(key=takeFirst)
       return fn
     return wrapper
 

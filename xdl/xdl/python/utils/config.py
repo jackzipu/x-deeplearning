@@ -97,7 +97,7 @@ def get_config(*keys, **kwargs):
   if _BASE_CONFIG is None:
     if _BASE_ARGS.config:
       _BASE_CONFIG = json.load(open(_BASE_ARGS.config, 'r'))
-      print("config: %s" % str(_BASE_CONFIG))
+      print(("config: %s" % str(_BASE_CONFIG)))
     else:
       _BASE_CONFIG = {}
   

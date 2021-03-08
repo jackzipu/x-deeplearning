@@ -122,16 +122,16 @@ class Saver(object):
     def save_meta(self, version, **kwargs):
       kwargs['xdl_global_step'] = get_global_step().value
       values = []
-      for k, v in kwargs.iteritems():
+      for k, v in kwargs.items():
         if isinstance(v, Tensor):
           v = execute(v)
           values.append(v)
         else:
           values.append(np.array(v))
       values = [min(v.flatten().tolist()) for v in values]
-      keys = kwargs.keys()
+      keys = list(kwargs.keys())
       assert len(keys) == len(values)
-      buf = json.dumps(dict(zip(keys, values)))
+      buf = json.dumps(dict(list(zip(keys, values))))
       path = os.path.join(self._ckpt_dir, version, '.meta')
       write_string_to_file(path, buf)
     def restore(self, version):
@@ -141,7 +141,7 @@ class Saver(object):
     def restore_op(self, version):
         return xdl.ps_restore_op(_string_to_int8(version))
     def export_graph(self, output_dir, as_text=False):
-        print 'start export graph'
+        print('start export graph')
         for (op_name, input_name, input_type, size, table) in graph_tag().inputs:
             self.append_input(op_name, input_name, input_type, size, table)
         self._graph_def.tag.output.op_name = graph_tag().output_op_name
@@ -151,7 +151,7 @@ class Saver(object):
         else:
             write_string_to_file("graph.pb", self._graph_def.SerializeToString())
             output(output_dir, "graph.pb")
-        print 'finish export graph'
+        print('finish export graph')
     def append_input(self, op_name, input_name, input_type, size=1, table=0):
         inp = self._graph_def.tag.input.add()
         inp.op_name = op_name
@@ -160,11 +160,11 @@ class Saver(object):
         inp.size = size
         inp.table = table
     def export_sparse_conf_v4(self, sparse_v4_dir, space_list=list(list())):
-        print 'start export sparse conf v4'
+        print('start export sparse conf v4')
         from xdl.python.training.v4 import f2id_pb2
         from google.protobuf.text_format import MessageToString
         f2id_list = f2id_pb2.F2IdList()
-        for gid in xrange(len(space_list)):
+        for gid in range(len(space_list)):
             for feature_groupid in space_list[gid]:
                 f2_id = f2id_list.item.add()
                 f2_id.feature_groupid = feature_groupid
@@ -172,13 +172,13 @@ class Saver(object):
         with open('embed.best.meta', 'wb') as f:  # f2id.pb
             f.write(MessageToString(f2id_list))
         output(sparse_v4_dir, 'embed.best.meta')
-        print 'finish export sparse conf v4'
+        print('finish export sparse conf v4')
     def export_dense_conf_v4(self, dense_v4_dir, embed_code_conf_list):
-        print 'start export dense conf v4'
+        print('start export dense conf v4')
         from xdl.python.training.v4 import dense_input_conf_pb2, embed_dimension_xdl_code_pb2
         from google.protobuf.text_format import MessageToString
         embed_dim_list = embed_dimension_xdl_code_pb2.EmbedDimList()
-        embed_dim_list.model_signature = str(long(time.mktime(datetime.datetime.utcnow().timetuple()) * 1000000))
+        embed_dim_list.model_signature = str(int(time.mktime(datetime.datetime.utcnow().timetuple()) * 1000000))
         global_offset = 1
         index = 0
         block = None
@@ -219,16 +219,16 @@ class Saver(object):
             f.write(MessageToString(embed_dim_list))
         output(dense_v4_dir, 'embed-dim-xdl-code-conf')
         output(dense_v4_dir, 'network_desc.pb')
-        print 'finish export dense conf v4'
+        print('finish export dense conf v4')
     def export_graph_v4(self, output_v4_dir, emb_dim, space_list=list(list()), order=1, comm_hint_type='common'):
-        print 'start export graph v4 @deprecated'
+        print('start export graph v4 @deprecated')
         self.export_sparse_graph_v4(output_v4_dir, emb_dim, space_list, order, comm_hint_type)
-        print 'finish export graph v4 @deprecated'
+        print('finish export graph v4 @deprecated')
     def export_sparse_graph_v4(self, output_v4_dir, emb_dim, space_list, order=1, comm_hint_type='common'):
         from xdl.python.training.v4 import dense_input_conf_pb2, embed_dimension_xdl_code_pb2, f2id_pb2
         from google.protobuf.text_format import MessageToString
         embed_dim_list = embed_dimension_xdl_code_pb2.EmbedDimList()
-        embed_dim_list.model_signature = str(long(time.mktime(datetime.datetime.utcnow().timetuple()) * 1000000))
+        embed_dim_list.model_signature = str(int(time.mktime(datetime.datetime.utcnow().timetuple()) * 1000000))
         if order == 1:
             comm_block = embed_dim_list.dense_input.input_blocks.add()
             ncomm_block = embed_dim_list.dense_input.input_blocks.add()
@@ -241,7 +241,7 @@ class Saver(object):
         ncomm_block.hint_type = dense_input_conf_pb2.UNCOMMON
         comm_index = 0
         ncomm_index = 0
-        for i in xrange(len(graph_tag().sparse_list)):
+        for i in range(len(graph_tag().sparse_list)):
             name = graph_tag().sparse_list[i]
             table = graph_tag().fea_dict[name]['table']
             embed_dim = embed_dim_list.embed_dim_list.add()
@@ -263,7 +263,7 @@ class Saver(object):
             f.write(MessageToString(embed_dim_list))
         output(output_v4_dir, 'embed-dim-xdl-code-conf')
         f2id_list = f2id_pb2.F2IdList()
-        for gid in xrange(len(space_list)):
+        for gid in range(len(space_list)):
             for feature_groupid in space_list[gid]:
                 f2_id = f2id_list.item.add()
                 f2_id.feature_groupid = feature_groupid
@@ -275,7 +275,7 @@ class Saver(object):
 class CheckpointMeta:
   def __init__(self, **kwargs):
     self._meta = {}
-    for k, v in kwargs.iteritems():
+    for k, v in kwargs.items():
       if not isinstance(v, Tensor):
         continue
       self._meta[k] = v
@@ -284,16 +284,16 @@ class CheckpointMeta:
   def save(self, ckpt_dir, version, values):
     if len(self._meta) == 0:
       return
-    keys = self._meta.keys()
+    keys = list(self._meta.keys())
     values = [min(v.flatten().tolist()) for v in values]
 
     assert len(keys) == len(values)
-    buf = json.dumps(dict(zip(keys, values)))
+    buf = json.dumps(dict(list(zip(keys, values))))
     path = os.path.join(ckpt_dir, version, '.meta')
     write_string_to_file(path, buf)
 
   def values(self):
-    return self._meta.values()
+    return list(self._meta.values())
 
 class CheckpointHook(Hook):
     def __init__(self, save_interval_step=None, save_interval_secs=None,
@@ -328,7 +328,7 @@ class CheckpointHook(Hook):
         if (self._is_training):
             res = [self._global_step.value]
             if self._meta is not None:
-              res.extend(self._meta.values())
+              res.extend(list(self._meta.values()))
             return res
 
     def after_run(self, v):
@@ -353,7 +353,7 @@ class CheckpointHook(Hook):
     def end(self):
         self.gstep_val = xdl.execute(self._global_step.value) + 1
         if self._meta is not None:
-            self.meta_val = xdl.execute(self._meta.values())
+            self.meta_val = xdl.execute(list(self._meta.values()))
         self._save_ckpt(self.gstep_val, self.meta_val)
         if self.gstep_val != self._last_save_step:
             self._ckpt_queue.append(self._create_version(self.gstep_val))
@@ -369,13 +369,13 @@ class CheckpointHook(Hook):
                 cmd = "rm -rf %s" % del_ckpt
             ret = os.system(cmd)
             if ret == 0:
-                print("ckpt number is larger than max_to_keep setting, delete oldest ckpt %s" % del_ckpt)
+                print(("ckpt number is larger than max_to_keep setting, delete oldest ckpt %s" % del_ckpt))
             else:
                 raise ValueError("Failed: %s" % cmd)
 
     def _save_ckpt(self, global_step, meta_values):
         version = self._create_version(global_step)
-        print('save checkpoint at global_step[%d], ckpt version[%s]' % (global_step, version))
+        print(('save checkpoint at global_step[%d], ckpt version[%s]' % (global_step, version)))
         self._saver.save(version)
         if meta_values:
             self._meta.save(self._ckpt_dir, version, meta_values)
@@ -392,6 +392,6 @@ class RestoreFromHook(Hook):
         if self._ckp_model and len(self._ckp_model) > 0:
             if xdl.get_task_index() == 0:
                 self._saver.restore(self._ckp_model)
-                print("restore checkpoint from " + str(self._ckp_model))
+                print(("restore checkpoint from " + str(self._ckp_model)))
             else:
                 time.sleep(120)

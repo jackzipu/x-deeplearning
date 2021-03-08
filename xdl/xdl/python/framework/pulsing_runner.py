@@ -33,7 +33,7 @@ def _flatten_outs(outs):
   elif isinstance(outs, (list, tuple, set)):
     return sum([_flatten_outs(i) for i in outs], [])
   elif isinstance(outs, dict):
-    return sum([_flatten_outs(i) for i in outs.values()], [])
+    return sum([_flatten_outs(i) for i in list(outs.values())], [])
   else:
     raise ValueError("Unknown Type: " + str(outs.__class__))
 
@@ -96,11 +96,11 @@ class PulsingRunner(object):
     levels = self._g.levels()
     nodes = self._g.nodes()
     self._nodes, self._levels = self._prune_node(self._outs, nodes, levels)
-    for k, v in self._levels.items():
+    for k, v in list(self._levels.items()):
       self._level_nodes[v].append(k)
     self._level_nums = list(self._level_nodes.keys())
     self._level_nums.sort()
-    self._level_id = dict(zip(self._level_nums, range(len(self._level_nums))))
+    self._level_id = dict(list(zip(self._level_nums, list(range(len(self._level_nums))))))
     self._level_channel = {k:{} for k in self._level_nums}
     self._level_run = {k:set() for k in self._level_nums}
     self._channel_count = 0
@@ -121,7 +121,7 @@ class PulsingRunner(object):
     self._dst_graph = self._build_all_graph()
 
   def _process_nodes(self):
-    for k, v in self._levels.items():
+    for k, v in list(self._levels.items()):
       self._process_node(self._nodes[k], v)
 
   def _process_outs(self):
@@ -142,7 +142,7 @@ class PulsingRunner(object):
 
   def _build_all_graph(self):
     ret = Graph()
-    for node in self._xnodes.values():
+    for node in list(self._xnodes.values()):
       ret.add_node_internal(pybind.NodeDef(node), 0)
     return ret
 
@@ -159,8 +159,8 @@ class PulsingRunner(object):
           dfs_set.add(i)
           dfs_list.append(i)
 
-    nodes = {k:v for k, v in nodes.items() if k in dfs_set}
-    levels = {k:v for k, v in levels.items() if k in dfs_set}
+    nodes = {k:v for k, v in list(nodes.items()) if k in dfs_set}
+    levels = {k:v for k, v in list(levels.items()) if k in dfs_set}
     return nodes, levels
 
   def _process_node(self, node, level):
@@ -172,7 +172,7 @@ class PulsingRunner(object):
         new_node.input.append(iny)
     for ot in node.output_type:
       new_node.output_type.append(ot)
-    for k, v in node.attr.items():
+    for k, v in list(node.attr.items()):
       new_node.attr[k] = v
     new_node.device = node.device
 
@@ -261,7 +261,7 @@ class PulsingRunner(object):
         level_id = self._level_id[level]
         if level_id != 0:
           xlevel = self._level_nums[level_id - 1]
-          for channel in self._level_channel[xlevel].values():
+          for channel in list(self._level_channel[xlevel].values()):
             node.input.append("^" + channel[1][:-2])
 
   def _add_channel_dst(self):

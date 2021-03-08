@@ -13,9 +13,9 @@
 # limitations under the License.
 # ==============================================================================
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+
+
+
 
 import contextlib
 
@@ -169,7 +169,7 @@ class Variable(object):
       raise Exception('initalizer not specified')
 
     extra_info = ''
-    for k,v in self._extra_info.items():
+    for k,v in list(self._extra_info.items()):
       extra_info += '%s=%s;' % (k, v)
     if self._vtype == VarType.Hash64:
       extra_info += 'hash64=true;'

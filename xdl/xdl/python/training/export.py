@@ -22,11 +22,11 @@ import time
 import xdl
 
 def _popen(cmd):
-    print 'os.popen(%s)' % cmd
+    print('os.popen(%s)' % cmd)
     return os.popen(cmd)
 
 def _system(cmd):
-    print 'os.system(%s)' % cmd
+    print('os.system(%s)' % cmd)
     return os.system(cmd)
 
 def _cmd(cmd):
@@ -138,8 +138,8 @@ def _update_save_dict(ckpt, var, save_dict, backend='debug', title='var'):
             break
         try:
             s.append(_read_dense_file(f))
-        except (ValueError), x:
-            print '    %s is not dense, pass' % var
+        except (ValueError) as x:
+            print('    %s is not dense, pass' % var)
             return
         else:
             pass
@@ -152,39 +152,39 @@ def _update_save_dict(ckpt, var, save_dict, backend='debug', title='var'):
             dict_lock.acquire()
             save_dict.update({('%s:%s' % (title, var)) : ndarray.array(weight)})
             dict_lock.release()
-            print '    %s export success' % var
+            print('    %s export success' % var)
         elif backend == 'tf':
             dict_lock.acquire()
             save_dict.update({(var) : (weight)})
             dict_lock.release()
-            print '    %s export success' % var
+            print('    %s export success' % var)
         else:
-            print '    %s export success:' % var, weight
+            print('    %s export success:' % var, weight)
 
 def _update_save_dict_run(n, ckpt, var_list, save_dict, backend='debug', title='var'):
     _update_save_dict(ckpt, var_list[n], save_dict, backend, title)
 
 def export_dense_debug(checkpoints_dir, arg_list):
     ckpt = get_latest_ckpt_v2(checkpoints_dir)
-    print 'export dense debug from %s' % ckpt    
+    print('export dense debug from %s' % ckpt)    
     save_dict = dict()
-    print '# export arg:', arg_list
+    print('# export arg:', arg_list)
     for arg in arg_list:
         _update_save_dict(ckpt, arg, save_dict, 'debug')
 
 def export_dense_mx(ckpt_dir, arg_list, aux_list, output_dir):
     ckpt = get_latest_ckpt_v2(ckpt_dir)
-    print 'export dense mx from %s' % ckpt    
+    print('export dense mx from %s' % ckpt)    
     manager = multiprocessing.Manager()
     save_dict = manager.dict()
-    print '# export arg:', arg_list
+    print('# export arg:', arg_list)
     p_list = []
-    for n in xrange(len(arg_list)):
+    for n in range(len(arg_list)):
         p = multiprocessing.Process(target=_update_save_dict_run, args=(n, ckpt, arg_list, save_dict, 'mx', 'var'))
         p_list.append(p)
         p.start()
-    print '# export aux:', aux_list
-    for n in xrange(len(aux_list)):
+    print('# export aux:', aux_list)
+    for n in range(len(aux_list)):
         p = multiprocessing.Process(target=_update_save_dict_run, args=(n, ckpt, aux_list, save_dict, 'mx', 'aux'))
         p_list.append(p)
         p.start()
@@ -199,7 +199,7 @@ def export_dense_mx(ckpt_dir, arg_list, aux_list, output_dir):
 
 def export_dense_tf(checkpoints_dir, output_dir):
     ckpt = get_latest_ckpt_v2(checkpoints_dir)
-    print '[%s] export dense tf from %s' % (time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())), ckpt)
+    print('[%s] export dense tf from %s' % (time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())), ckpt))
     if _is_hdfs(ckpt):
         if _is_exist('dense_dir'):
             _system('rm -rf dense_dir')
@@ -208,11 +208,11 @@ def export_dense_tf(checkpoints_dir, output_dir):
     arg_list = _popen("ls %s |grep '\^0' |awk -F'/' '{print $NF}'" % ckpt).readlines()
     arg_list = [i[:-3].split(' ')[-1] for i in arg_list]
 
-    print '[%s] # export tf arg:' % time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())), arg_list
+    print('[%s] # export tf arg:' % time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())), arg_list)
     manager = multiprocessing.Manager()
     save_dict = manager.dict()
     p_list = []
-    for n in xrange(len(arg_list)):
+    for n in range(len(arg_list)):
         p = multiprocessing.Process(target=_update_save_dict_run, args=(n, ckpt, arg_list, save_dict, 'tf'))
         p_list.append(p)
         p.start()
@@ -236,7 +236,7 @@ def _transfer_sparse_idx_to_hash(fname, dim, offset):
         length = len(t)
         idx = 0
         begin = 0
-        for i in xrange(length):
+        for i in range(length):
             if t[i] == ',':
                 idx = idx + 1
                 if idx == dim:

@@ -102,7 +102,7 @@ class ModelServer(object):
 
   @staticmethod
   def updates():
-    return [i.update() for i in _MODEL_DICT.values()]
+    return [i.update() for i in list(_MODEL_DICT.values())]
 
 def get_model_server_by_name(name):
   return _MODEL_DICT[name]

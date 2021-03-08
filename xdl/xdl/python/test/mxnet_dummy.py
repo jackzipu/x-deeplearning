@@ -21,7 +21,7 @@ def copy_data(executor):
     embs.append(mx.nd.array([[1.], [1.], [1.], [1.]]))
     embs.append(mx.nd.array([[1.], [1.], [1.], [1.]]))
     embs.append(mx.nd.array([[2.], [2.], [2.], [2.]]))
-    for i in xrange(len(embs)):
+    for i in range(len(embs)):
         embs[i].copyto(executor.arg_dict['emb%d' % (i+1)])
 
     label = mx.nd.array([[0., 1.], [0., 1.], [0., 1.], [0., 1.], [1., 0.], [1., 0.], [1., 0.]])
@@ -37,9 +37,9 @@ def copy_data(executor):
     fc2_bias = mx.nd.array([0., 0.])
     fc2_bias.copyto(executor.arg_dict['fc2_bias'])
 
-    print "executor.arg_dict:", executor.arg_dict
-    print "executor.grad_dict:", executor.grad_dict
-    print "executor.aux_dict:", executor.aux_dict
+    print("executor.arg_dict:", executor.arg_dict)
+    print("executor.grad_dict:", executor.grad_dict)
+    print("executor.aux_dict:", executor.aux_dict)
 
 def train():
     model_outputs = model(embs_len=4, comm_bs=4, bs=7)
@@ -49,32 +49,32 @@ def train():
     if len(model_outputs) > 2:
         symbol_list.extend([mx.sym.BlockGrad(x) for x in model_outputs[2:]])
     symbol = mx.sym.Group(symbol_list)
-    print 'symbol.tojson() =', symbol.tojson()
+    print('symbol.tojson() =', symbol.tojson())
     
     executor = symbol.simple_bind(ctx=mx.cpu(), grad_req='write')
     
-    for itr in xrange(1, 2):
-        print "<<<<<<<", itr, ">>>>>>>>"
+    for itr in range(1, 2):
+        print("<<<<<<<", itr, ">>>>>>>>")
         copy_data(executor)
         executor.forward(is_train=True)
-        print "loss:", executor.outputs[0]
-        print "prop:", executor.outputs[1]
-        print "label:", executor.outputs[2]
-        print "indicator:", executor.outputs[3]
-        print "din:", executor.outputs[4]
-        print "dout:", executor.outputs[5]
-        print "fc1_weight:", executor.outputs[6]
-        print "fc1_bias:", executor.outputs[7]
-        print "fc2_weight:", executor.outputs[8]
-        print "fc2_bias:", executor.outputs[9]
+        print("loss:", executor.outputs[0])
+        print("prop:", executor.outputs[1])
+        print("label:", executor.outputs[2])
+        print("indicator:", executor.outputs[3])
+        print("din:", executor.outputs[4])
+        print("dout:", executor.outputs[5])
+        print("fc1_weight:", executor.outputs[6])
+        print("fc1_bias:", executor.outputs[7])
+        print("fc2_weight:", executor.outputs[8])
+        print("fc2_bias:", executor.outputs[9])
         executor.backward()
-        print "\n## args:", executor.arg_dict
-        print "\n## grads:", executor.grad_dict
-        print "\n## auxs:", executor.aux_dict
+        print("\n## args:", executor.arg_dict)
+        print("\n## grads:", executor.grad_dict)
+        print("\n## auxs:", executor.aux_dict)
     
 def model(embs_len, comm_bs, bs):
     embs = []
-    for i in xrange(embs_len):
+    for i in range(embs_len):
         embs.append(mx.sym.var(name='emb%d' % (i+1), shape=[comm_bs, 1]))
     label = mx.sym.var(name='label', shape=[bs, 2])
     label = mx.sym.BlockGrad(label)
@@ -84,7 +84,7 @@ def model(embs_len, comm_bs, bs):
     
     ## concat, take
     din = embs[0]
-    for i in xrange(1, embs_len):
+    for i in range(1, embs_len):
         din = mx.sym.concat(din, embs[i])
     din = mx.sym.take(din, indicator)
     

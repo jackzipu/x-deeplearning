@@ -69,7 +69,7 @@ class DataIO(pybind.DataIO):
             it's a low level interface,
             non-stream system should use DataSharding to partition files
         '''
-        if isinstance(path, basestring):
+        if isinstance(path, str):
             super(DataIO, self).add_path(path)
             return
         for p in path:
@@ -139,33 +139,33 @@ class DataIO(pybind.DataIO):
             assert kvs[1] == '='
             dict[kvs[0].strip()] = kvs[2].strip()
 
-        assert dict.has_key('Name')
-        if dict.has_key('Type') and dict['Type'] == 'Vector':
+        assert 'Name' in dict
+        if 'Type' in dict and dict['Type'] == 'Vector':
             type = pybind.features.dense
         else:
             type = pybind.features.sparse
 
-        if dict.has_key('Table'):
+        if 'Table' in dict:
             table = int(dict['Table'])
         else:
             table = 0
 
-        if dict.has_key('Nvec'):
+        if 'Nvec' in dict:
             nvec = int(dict['Nvec'])
         else:
             nvec = 0
 
-        if dict.has_key('Dim'):
+        if 'Dim' in dict:
             dim = int(dict['Dim'])
         else:
             dim = 0
 
-        if dict.has_key('Serialized'):
+        if 'Serialized' in dict:
             serialized = True
         else:
             serialized = False
 
-        has_key = dict.has_key('Expr')
+        has_key = 'Expr' in dict
         dsl = ''
         if has_key:
             if len(dict['Expr'].partition('(')) < 3:

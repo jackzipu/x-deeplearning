@@ -62,7 +62,7 @@ for i in range(4):
 f = open(sys.argv[1], "wb")
 zb = sg.SerializeToString()
 l = len(zb)
-print l
+print(l)
 lb = struct.pack("I", l)
 
 for i in range(3):

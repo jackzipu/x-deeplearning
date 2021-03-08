@@ -52,7 +52,7 @@ def add_plugin(plugin):
 
 def run_ps_cmd(**kwargs):
     cmd = [os.path.dirname(os.path.realpath(__file__)) + "/../../bin/ps"]
-    for k, v in kwargs.items():
+    for k, v in list(kwargs.items()):
         if v is None:
             continue
         cmd.append("-" + k)
@@ -61,7 +61,7 @@ def run_ps_cmd(**kwargs):
         cmd.append("--plugin")
         cmd.append('"' + str(plugin) + '"')
     cmd = " ".join(cmd)
-    print "cmd: " + cmd
+    print("cmd: " + cmd)
     ret = os.system(cmd)
     if ret != 0:
         raise ValueError("Run cmd Error, cmd=[%s] exit_code=[%s]" % (cmd, ret))

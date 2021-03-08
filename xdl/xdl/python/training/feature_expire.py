@@ -17,13 +17,13 @@ import xdl
 from xdl.python.framework.session import Hook
 from xdl.python.training.training_utils import get_global_step
 from xdl.python.training.env import is_local_mode
+from xdl.python.sparse_engine.embedding import *
 import os
 import numpy as np
 
 class GlobalStepMarkHook(Hook):
   def __init__(self, var_name, ids):
     super(GlobalStepMarkHook, self).__init__()
-    from xdl.python.sparse_engine.embedding import *
     embedding_info = get_embedding_info_by_name(var_name)
     global_step = get_global_step().value
     with xdl.control_dependencies([embedding_info.embedding]):
