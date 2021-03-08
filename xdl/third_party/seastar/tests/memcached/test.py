@@ -29,7 +29,7 @@ def run(args, cmd):
         cmdline = ['tests/memcached/test_memcached.py'] + cmd
         if args.fast:
             cmdline.append('--fast')
-        print('Running: ' + ' '.join(cmdline))
+        print(('Running: ' + ' '.join(cmdline)))
         subprocess.check_call(cmdline)
     finally:
         print('Killing memcached...')

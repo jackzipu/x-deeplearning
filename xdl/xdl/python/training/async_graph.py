@@ -142,7 +142,7 @@ class AsyncGraph():
   def dequeue(self):
     tensors = xdl.dequeue_op(types=self._output_types)
     ret = {}
-    for name in self._offsets_map.keys():
+    for name in list(self._offsets_map.keys()):
       if name.startswith("__"):
         continue
       offset = self._offsets_map[name]
@@ -155,7 +155,7 @@ class AsyncGraph():
       elif offset.type == "dense":
         ret[name] = tensors[offset.offset]
     print("--------AsyncGraph--------")
-    print(ret.keys())
+    print((list(ret.keys())))
     print("--------AsyncGraph--------")  
     return ret
 

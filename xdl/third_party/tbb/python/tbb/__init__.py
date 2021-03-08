@@ -19,7 +19,7 @@
 #
 
 
-from __future__ import print_function
+
 
 import multiprocessing.pool
 import ctypes
@@ -213,7 +213,7 @@ class Monkey:
             del os.environ['MKL_THREADING_LAYER']
         else:
             os.environ['MKL_THREADING_LAYER'] = self.env
-        for name in self._items.keys():
+        for name in list(self._items.keys()):
             setattr(self._modules[name], name, self._items[name])
 
 
@@ -283,7 +283,7 @@ def _main():
             libtbbmalloc_lib = 'libtbbmalloc_proxy.so.2'
             ld_preload = 'LD_PRELOAD'
             os.environ["_TBB_MALLOC_PRELOAD"] = "1"
-            preload_list = filter(None, os.environ.get(ld_preload, "").split(':'))
+            preload_list = [_f for _f in os.environ.get(ld_preload, "").split(':') if _f]
             if libtbbmalloc_lib in preload_list:
                 print('Info:', ld_preload, "contains", libtbbmalloc_lib, "already\n")
             else:

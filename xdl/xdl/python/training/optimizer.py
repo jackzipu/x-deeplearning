@@ -13,9 +13,9 @@
 # limitations under the License.
 # ==============================================================================
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+
+
+
 
 import xdl
 import numpy as np
@@ -48,7 +48,7 @@ class Optimizer(object):
         continue
 
       if isinstance(grad, list):
-        raise 'dupcate grad for var:', var
+        raise ValueError('dupcate grad for var:', var)
       if not is_embedding_var(var):
         update_ops.append(self.dense_update(var, grad))
       else:
@@ -58,7 +58,7 @@ class Optimizer(object):
     if len(sparse_grads) != len(sparse_var_grad):
       raise Exception("calc grad failed!")
     merged_sparse_grads = self.merge_sparse_grad(
-      zip([x[0] for x in sparse_var_grad], sparse_grads))
+      list(zip([x[0] for x in sparse_var_grad], sparse_grads)))
 
     if get_collection("sparse_grad") == None:
       add_to_collection("sparse_grad", {})
@@ -84,7 +84,7 @@ class Optimizer(object):
         sparse_var_dict[var.name] = []
       sparse_var_dict[var.name].append(grad)
       name_2_var[var.name] = var
-    for var, grads in sparse_var_dict.items():
+    for var, grads in list(sparse_var_dict.items()):
       merged_sparse_grads.append(
         (name_2_var[var], grads[0] if len(grads) == 1 else self._add_sparse_grads(grads)))
     return merged_sparse_grads

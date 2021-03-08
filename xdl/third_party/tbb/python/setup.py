@@ -20,7 +20,7 @@
 
 
 # System imports
-from __future__ import print_function
+
 from glob import glob
 import platform
 import os

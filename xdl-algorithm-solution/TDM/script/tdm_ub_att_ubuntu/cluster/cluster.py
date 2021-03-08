@@ -15,7 +15,7 @@
 
 #!/usr/bin/env python
 
-from __future__ import print_function
+
 
 import os
 import time
@@ -26,7 +26,7 @@ import multiprocessing as mp
 import numpy as np
 
 from sklearn.cluster import KMeans
-import tree_builder
+from . import tree_builder
 
 
 class Cluster:
@@ -113,7 +113,7 @@ class Cluster:
 
     def process_prev_result(self, queue):
         if not self.prev_result:
-            queue.put((0, np.array(range(len(self.ids)))))
+            queue.put((0, np.array(list(range(len(self.ids))))))
             return True
 
         di = dict()

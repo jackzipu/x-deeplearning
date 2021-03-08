@@ -756,7 +756,7 @@ class Struct(object):
     return iter(self.fields)
 
   def keys(self):  # pylint: disable=invalid-name
-    return self.fields.keys()
+    return list(self.fields.keys())
 
   def values(self):  # pylint: disable=invalid-name
     return [self[key] for key in self]
@@ -779,7 +779,7 @@ class Struct(object):
     return self.fields[key].struct_value
 
   def update(self, dictionary):  # pylint: disable=invalid-name
-    for key, value in dictionary.items():
+    for key, value in list(dictionary.items()):
       _SetStructValue(self.fields[key], value)
 
 collections.MutableMapping.register(Struct)

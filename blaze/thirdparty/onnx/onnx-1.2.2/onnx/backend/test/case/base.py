@@ -1,7 +1,7 @@
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
+
+
+
+
 
 from collections import defaultdict
 import inspect
@@ -29,7 +29,7 @@ class _Exporter(type):
     exports = defaultdict(list)  # type: Dict[Text, List[Tuple[Text, Text]]]
 
     def __init__(cls, name, bases, dct):  # type: (str, Tuple[Type[Any], ...], Dict[str, Any]) -> None
-        for k, v in dct.items():
+        for k, v in list(dct.items()):
             if k.startswith('export'):
                 if not isinstance(v, staticmethod):
                     raise ValueError(

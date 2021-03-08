@@ -20,7 +20,7 @@
 
 # Provides unified tool for preparing TBB for packaging
 
-from __future__ import print_function
+
 import os
 import re
 import sys
@@ -131,7 +131,7 @@ filemap = OrderedDict()
 def append_files(names, dst, paths=release_dirs):
     global filemap
     files = sum([glob(jp(d, f)) for d in paths for f in names], [])
-    filemap.update(dict(zip(files, [dst]*len(files))))
+    filemap.update(dict(list(zip(files, [dst]*len(files)))))
 
 
 if args.install_libs:
@@ -171,13 +171,13 @@ if args.install_docs:
             ]
     append_files(files, doc_dir, paths=release_dirs+[jp(args.tbbroot, d) for d in ('.', 'doc')])
 
-for f in filemap.keys():
+for f in list(filemap.keys()):
     assert os.path.exists(f)
     assert os.path.isfile(f)
 
 if filemap:
     print("Copying to prefix =", args.prefix)
-for f, dest in filemap.items():
+for f, dest in list(filemap.items()):
     if not os.path.isdir(dest):
         os.makedirs(dest)
     print("+ %s to $prefix%s"%(f,dest.replace(args.prefix, '')))

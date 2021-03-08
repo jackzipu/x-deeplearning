@@ -1,7 +1,7 @@
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
+
+
+
+
 
 import random
 
@@ -70,7 +70,7 @@ class TestHelperAttributeFunctions(unittest.TestCase):
         self.assertEqual(attr.s, b"test")
         checker.check_attribute(attr)
         # unicode
-        attr = helper.make_attribute("str", u"test")
+        attr = helper.make_attribute("str", "test")
         self.assertEqual(attr.name, "str")
         self.assertEqual(attr.s, b"test")
         checker.check_attribute(attr)

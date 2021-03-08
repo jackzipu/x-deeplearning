@@ -33,4 +33,4 @@ b = [[[[0.4],
 
 s = np.multiply(a, b)
 
-print np.sum(s, axis=2)
+print(np.sum(s, axis=2))

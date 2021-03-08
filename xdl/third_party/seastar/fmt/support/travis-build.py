@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # Build the project on Travis CI.
 
-from __future__ import print_function
-import errno, os, re, shutil, sys, tempfile, urllib
+
+import errno, os, re, shutil, sys, tempfile, urllib.request, urllib.parse, urllib.error
 from subprocess import call, check_call, check_output, Popen, PIPE, STDOUT
 
 def rmtree_if_exists(dir):
@@ -32,7 +32,7 @@ def install_dependencies():
     check_call(['sudo', 'apt-get', 'install', 'python-virtualenv', 'nodejs'])
     check_call(['npm', 'install', '-g', 'less', 'less-plugin-clean-css'])
     deb_file = 'doxygen_1.8.6-2_amd64.deb'
-    urllib.urlretrieve('http://mirrors.kernel.org/ubuntu/pool/main/d/doxygen/' +
+    urllib.request.urlretrieve('http://mirrors.kernel.org/ubuntu/pool/main/d/doxygen/' +
                        deb_file, deb_file)
     check_call(['sudo', 'dpkg', '-i', deb_file])
 

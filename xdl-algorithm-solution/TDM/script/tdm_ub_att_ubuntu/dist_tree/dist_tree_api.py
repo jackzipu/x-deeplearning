@@ -32,7 +32,7 @@ if version_info >= (2, 6, 0):
         try:
             fp, pathname, description = imp.find_module('_dist_tree_api', [dirname(__file__)])
         except ImportError:
-            import _dist_tree_api
+            from . import _dist_tree_api
             return _dist_tree_api
         if fp is not None:
             try:
@@ -43,7 +43,7 @@ if version_info >= (2, 6, 0):
     _dist_tree_api = swig_import_helper()
     del swig_import_helper
 else:
-    import _dist_tree_api
+    from . import _dist_tree_api
 del version_info
 try:
     _swig_property = property
@@ -143,7 +143,7 @@ class SwigPyIterator(_object):
     def copy(self):
         return _dist_tree_api.SwigPyIterator_copy(self)
 
-    def next(self):
+    def __next__(self):
         return _dist_tree_api.SwigPyIterator_next(self)
 
     def __next__(self):
@@ -189,7 +189,7 @@ class _string_list(_object):
     def __iter__(self):
         return self.iterator()
 
-    def __nonzero__(self):
+    def __bool__(self):
         return _dist_tree_api._string_list___nonzero__(self)
 
     def __bool__(self):

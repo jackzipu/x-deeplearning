@@ -31,7 +31,7 @@ TF_MAIN_CLASS = "com.alibaba.xdl.Client"
 def main():
     args, dargs = parse_args()
     cmd = gen_client_cmd(args, dargs)
-    print("CMD: %s" % cmd)
+    print(("CMD: %s" % cmd))
     rc = realtime_shell(cmd)
     return rc
 
@@ -50,12 +50,12 @@ def get_hadoop_bin():
   if hadoop_home:
     bin = hadoop_home + "/bin/hadoop"
     if os.path.exists(bin):
-      print("hadoop bin %s" % bin)
+      print(("hadoop bin %s" % bin))
       return bin
   else:
     default_bin = "/usr/local/hadoop/bin/hadoop"
     if os.path.exists(default_bin):
-      print("hadoop bin default %s" % default_bin)
+      print(("hadoop bin default %s" % default_bin))
       return default_bin
   
   print("Need HADOOP_HOME, can submit job by 'HADOOP_HOME=/xxxx/hadoop xdl_submit.py --config xxx.json")
@@ -100,7 +100,7 @@ def replace_config(config, uuid, dargs):
       
     # create new file
     local_dir = '/tmp/xdl_local/' + uuid
-    os.makedirs(local_dir, 0777)
+    os.makedirs(local_dir, 0o777)
     new_config = local_dir + "/" + os.path.basename(config)  
     output = open(new_config, "w")
     output.write(content)
@@ -120,7 +120,7 @@ def realtime_shell(cmd):
     rc = p.returncode
     logger.debug("run cmd %s, rc:%s.", "success" if rc==0 else "fail", rc)
     return rc
-  except Exception, msg:
+  except Exception as msg:
     logger.error("run cmd faild, rc:%s, err_msg:%s", rc, str(msg))
     return 1
 
@@ -129,7 +129,7 @@ if __name__ == "__main__":
   exit_code = 0
   try:
     exit_code = main()
-  except Exception, e:
+  except Exception as e:
     import traceback
     traceback.print_exc()
     exit_code = 2

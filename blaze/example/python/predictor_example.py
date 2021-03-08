@@ -35,17 +35,17 @@ def predict_model(optimization_pass, device_type, device_id):
 
     predictor = pm.create_predictor(device_type, device_id)
 
-    print 'input len=', len(predictor.list_input_names())
+    print('input len=', len(predictor.list_input_names()))
     for feed_name in predictor.list_input_names():
       splits = feed_name.split('.')
-      print splits[0]
+      print(splits[0])
     
     ## feed indicator
     predictor.reshape_input("indicator.0", indicator_shape)
     predictor.feed("indicator.0", indicator)
 
     ## feed comm sparse feature
-    for x in xrange(1, 70):
+    for x in range(1, 70):
       name_ids = 'item_%d.ids' % (x)
       predictor.reshape_input(name_ids, comm_id_shape)
       predictor.feed(name_ids, comm_id)
@@ -73,11 +73,11 @@ def predict_model(optimization_pass, device_type, device_id):
 
     predictor.forward()
 
-    print predictor.output_asnumpy('softmaxoutput0')
+    print(predictor.output_asnumpy('softmaxoutput0'))
 
     names = predictor.list_internal_names()
     for name in names:
       data = predictor.internal_asnumpy(name)
-      print 'name=', name, data
+      print('name=', name, data)
 
 predict_model(1, 0, 0)

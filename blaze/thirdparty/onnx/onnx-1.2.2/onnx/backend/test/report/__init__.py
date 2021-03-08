@@ -1,7 +1,7 @@
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
+
+
+
+
 
 import pytest  # type: ignore
 
@@ -38,6 +38,6 @@ def pytest_runtest_logreport(report):  # type: (Any) -> None
 
 @pytest.hookimpl(trylast=True)  # type: ignore
 def pytest_terminal_summary(terminalreporter, exitstatus):  # type: (pytest.terminal.TerminalReporter, int) -> None
-    for mark in _marks.values():
+    for mark in list(_marks.values()):
         _add_mark(mark, 'loaded')
     _coverage.report_text(terminalreporter)

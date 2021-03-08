@@ -13,9 +13,9 @@
 # limitations under the License.
 # ==============================================================================
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+
+
+
 
 import os
 import sys
@@ -65,7 +65,7 @@ def recursive_make_placeholder(x, xdl_inputs, tf_inputs):
   global _PLACEHOLDER_INFOS
   if isinstance(x, dict):
     ret = {}
-    for key in x.keys():
+    for key in list(x.keys()):
       ret[key] = recursive_make_placeholder(x[key], xdl_inputs, tf_inputs)
     return ret
   if isinstance(x, (tuple, list)):

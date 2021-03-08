@@ -13,9 +13,9 @@
 # limitations under the License.
 # ==============================================================================
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+
+
+
 
 import os
 import sys
@@ -63,17 +63,17 @@ class MX2XDL(object):
             return xi.Constant(value=args['value'])
         elif initializer == 'uniform':
             scale = 0.07
-            if args.has_key('scale'):
+            if 'scale' in args:
                 scale = args['scale']
             return xi.UniformUnitScaling(factor=scale)
         elif initializer == 'normal':
             sigma = 0.01
-            if args.has_key('sigma'):
+            if 'sigma' in args:
                 sigma = args['sigma']
             return xi.TruncatedNormal(stddev=sigma)
         elif initializer == 'identity':
             param = []
-            if args.has_key('init_value'):
+            if 'init_value' in args:
                 param = args['init_value']
             return xi.Identity(np.array(param, dtype=np.float32))
         else:

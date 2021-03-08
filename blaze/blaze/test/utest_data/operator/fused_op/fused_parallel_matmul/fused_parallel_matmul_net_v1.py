@@ -26,6 +26,6 @@ b = [[[[1.0],
       [[1.1],
        [0.1]]]]
 
-print np.matmul(a[0], b[0])
-print np.matmul(a[1], b[1])
+print(np.matmul(a[0], b[0]))
+print(np.matmul(a[1], b[1]))
 

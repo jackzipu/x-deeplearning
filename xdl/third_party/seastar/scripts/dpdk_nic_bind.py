@@ -54,7 +54,7 @@ args = []
 def usage():
     '''Print usage information for the program'''
     argv0 = basename(sys.argv[0])
-    print """
+    print("""
 Usage:
 ------
 
@@ -110,7 +110,7 @@ To unbind 0000:01:00.0 from using any driver
 To bind 0000:02:00.0 and 0000:02:00.1 to the ixgbe kernel driver
         %(argv0)s -b ixgbe 02:00.0 02:00.1
 
-    """ % locals() # replace items from local variables
+    """ % locals()) # replace items from local variables
 
 # This is roughly compatible with check_output function in subprocess module
 # which is only available in python 2.7.
@@ -176,10 +176,10 @@ def check_modules():
     # check if we have at least one loaded module
     if True not in [mod["Found"] for mod in mods] and b_flag is not None:
         if b_flag in dpdk_drivers:
-            print "Error - no supported modules(DPDK driver) are loaded"
+            print("Error - no supported modules(DPDK driver) are loaded")
             sys.exit(1)
         else:
-            print "Warning - no supported modules(DPDK driver) are loaded"
+            print("Warning - no supported modules(DPDK driver) are loaded")
 
     # change DPDK driver list to only contain drivers that are loaded
     dpdk_drivers = [mod["Name"] for mod in mods if mod["Found"]]
@@ -242,18 +242,17 @@ def get_nic_details():
     ssh_if = []
     route = check_output(["ip", "-o", "route"])
     # filter out all lines for 169.254 routes
-    route = "\n".join(filter(lambda ln: not ln.startswith("169.254"),
-                             route.splitlines()))
+    route = "\n".join([ln for ln in route.splitlines() if not ln.startswith("169.254")])
     rt_info = route.split()
-    for i in xrange(len(rt_info) - 1):
+    for i in range(len(rt_info) - 1):
         if rt_info[i] == "dev":
             ssh_if.append(rt_info[i+1])
 
     # based on the basic info, get extended text details
-    for d in devices.keys():
+    for d in list(devices.keys()):
         # get additional info and add it to existing data
-        devices[d] = dict(devices[d].items() +
-                          get_pci_device_details(d).items())
+        devices[d] = dict(list(devices[d].items()) +
+                          list(get_pci_device_details(d).items()))
 
         for _if in ssh_if:
             if _if in devices[d]["Interface"].split(","):
@@ -289,26 +288,26 @@ def dev_id_from_dev_name(dev_name):
         return "0000:" + dev_name
     else:
         # check if it's an interface name, e.g. eth1
-        for d in devices.keys():
+        for d in list(devices.keys()):
             if dev_name in devices[d]["Interface"].split(","):
                 return devices[d]["Slot"]
     # if nothing else matches - error
-    print "Unknown device: %s. " \
-        "Please specify device in \"bus:slot.func\" format" % dev_name
+    print("Unknown device: %s. " \
+        "Please specify device in \"bus:slot.func\" format" % dev_name)
     sys.exit(1)
 
 def unbind_one(dev_id, force):
     '''Unbind the device identified by "dev_id" from its current driver'''
     dev = devices[dev_id]
     if not has_driver(dev_id):
-        print "%s %s %s is not currently managed by any driver\n" % \
-            (dev["Slot"], dev["Device_str"], dev["Interface"])
+        print("%s %s %s is not currently managed by any driver\n" % \
+            (dev["Slot"], dev["Device_str"], dev["Interface"]))
         return
 
     # prevent us disconnecting ourselves
     if dev["Ssh_if"] and not force:
-        print "Routing table indicates that interface %s is active" \
-            ". Skipping unbind" % (dev_id)
+        print("Routing table indicates that interface %s is active" \
+            ". Skipping unbind" % (dev_id))
         return
 
     # write to /sys to unbind
@@ -316,7 +315,7 @@ def unbind_one(dev_id, force):
     try:
         f = open(filename, "a")
     except:
-        print "Error: unbind failed for %s - Cannot open %s" % (dev_id, filename)
+        print("Error: unbind failed for %s - Cannot open %s" % (dev_id, filename))
         sys/exit(1)
     f.write(dev_id)
     f.close()
@@ -329,14 +328,14 @@ def bind_one(dev_id, driver, force):
 
     # prevent disconnection of our ssh session
     if dev["Ssh_if"] and not force:
-        print "Routing table indicates that interface %s is active" \
-            ". Not modifying" % (dev_id)
+        print("Routing table indicates that interface %s is active" \
+            ". Not modifying" % (dev_id))
         return
 
     # unbind any existing drivers we don't want
     if has_driver(dev_id):
         if dev["Driver_str"] == driver:
-            print "%s already bound to driver %s, skipping\n" % (dev_id, driver)
+            print("%s already bound to driver %s, skipping\n" % (dev_id, driver))
             return
         else:
             saved_driver = dev["Driver_str"]
@@ -349,14 +348,14 @@ def bind_one(dev_id, driver, force):
         try:
             f = open(filename, "w")
         except:
-            print "Error: bind failed for %s - Cannot open %s" % (dev_id, filename)
+            print("Error: bind failed for %s - Cannot open %s" % (dev_id, filename))
             return
         try:
             f.write("%04x %04x" % (dev["Vendor"], dev["Device"]))
             f.close()
         except:
-            print "Error: bind failed for %s - Cannot write new PCI ID to " \
-                "driver %s" % (dev_id, driver)
+            print("Error: bind failed for %s - Cannot write new PCI ID to " \
+                "driver %s" % (dev_id, driver))
             return
 
     # do the bind by writing to /sys
@@ -364,7 +363,7 @@ def bind_one(dev_id, driver, force):
     try:
         f = open(filename, "a")
     except:
-        print "Error: bind failed for %s - Cannot open %s" % (dev_id, filename)
+        print("Error: bind failed for %s - Cannot open %s" % (dev_id, filename))
         if saved_driver is not None: # restore any previous driver
             bind_one(dev_id, saved_driver, force)
         return
@@ -378,7 +377,7 @@ def bind_one(dev_id, driver, force):
         tmp = get_pci_device_details(dev_id)
         if "Driver_str" in tmp and tmp["Driver_str"] == driver:
             return
-        print "Error: bind failed for %s - Cannot bind to driver %s" % (dev_id, driver)
+        print("Error: bind failed for %s - Cannot bind to driver %s" % (dev_id, driver))
         if saved_driver is not None: # restore any previous driver
             bind_one(dev_id, saved_driver, force)
         return
@@ -386,7 +385,7 @@ def bind_one(dev_id, driver, force):
 
 def unbind_all(dev_list, force=False):
     """Unbind method, takes a list of device locations"""
-    dev_list = map(dev_id_from_dev_name, dev_list)
+    dev_list = list(map(dev_id_from_dev_name, dev_list))
     for d in dev_list:
         unbind_one(d, force)
 
@@ -394,7 +393,7 @@ def bind_all(dev_list, driver, force=False):
     """Bind method, takes a list of device locations"""
     global devices
 
-    dev_list = map(dev_id_from_dev_name, dev_list)
+    dev_list = list(map(dev_id_from_dev_name, dev_list))
 
     for d in dev_list:
         bind_one(d, driver, force)
@@ -404,14 +403,14 @@ def bind_all(dev_list, driver, force=False):
     # be bound even if no one has asked them to. hence, we check the list of
     # drivers again, and see if some of the previously-unbound devices were
     # erroneously bound.
-    for d in devices.keys():
+    for d in list(devices.keys()):
         # skip devices that were already bound or that we know should be bound
         if "Driver_str" in devices[d] or d in dev_list:
             continue
 
         # update information about this device
-        devices[d] = dict(devices[d].items() +
-                          get_pci_device_details(d).items())
+        devices[d] = dict(list(devices[d].items()) +
+                          list(get_pci_device_details(d).items()))
 
         # check if updated information indicates that the device was bound
         if "Driver_str" in devices[d]:
@@ -423,8 +422,8 @@ def display_devices(title, dev_list, extra_params = None):
     %()s fields in it for replacement by the named fields in each device's
     dictionary.'''
     strings = [] # this holds the strings to print. We sort before printing
-    print "\n%s" % title
-    print   "="*len(title)
+    print("\n%s" % title)
+    print("="*len(title))
     if len(dev_list) == 0:
         strings.append("<none>")
     else:
@@ -436,7 +435,7 @@ def display_devices(title, dev_list, extra_params = None):
                 strings.append("%s '%s'" % (dev["Slot"], dev["Device_str"]))
     # sort before printing, so that the entries appear in PCI order
     strings.sort()
-    print "\n".join(strings) # print one per line
+    print("\n".join(strings)) # print one per line
 
 def show_status():
     '''Function called when the script is passed the "--status" option. Displays
@@ -448,7 +447,7 @@ def show_status():
     no_drv = []
 
     # split our list of devices into the three categories above
-    for d in devices.keys():
+    for d in list(devices.keys()):
         if not has_driver(d):
             no_drv.append(devices[d])
             continue
@@ -480,9 +479,9 @@ def parse_args():
         opts, args = getopt.getopt(sys.argv[1:], "b:u",
                                ["help", "usage", "status", "force",
                                 "bind=", "unbind"])
-    except getopt.GetoptError, error:
-        print str(error)
-        print "Run '%s --usage' for further information" % sys.argv[0]
+    except getopt.GetoptError as error:
+        print(str(error))
+        print("Run '%s --usage' for further information" % sys.argv[0])
         sys.exit(1)
 
     for opt, arg in opts:
@@ -495,7 +494,7 @@ def parse_args():
             force_flag = True
         if opt == "-b" or opt == "-u" or opt == "--bind" or opt == "--unbind":
             if b_flag is not None:
-                print "Error - Only one bind or unbind may be specified\n"
+                print("Error - Only one bind or unbind may be specified\n")
                 sys.exit(1)
             if opt == "-u" or opt == "--unbind":
                 b_flag = "none"
@@ -510,13 +509,13 @@ def do_arg_actions():
     global args
 
     if b_flag is None and not status_flag:
-        print "Error: No action specified for devices. Please give a -b or -u option"
-        print "Run '%s --usage' for further information" % sys.argv[0]
+        print("Error: No action specified for devices. Please give a -b or -u option")
+        print("Run '%s --usage' for further information" % sys.argv[0])
         sys.exit(1)
 
     if b_flag is not None and len(args) == 0:
-        print "Error: No devices specified."
-        print "Run '%s --usage' for further information" % sys.argv[0]
+        print("Error: No devices specified.")
+        print("Run '%s --usage' for further information" % sys.argv[0])
         sys.exit(1)
 
     if b_flag == "none" or b_flag == "None":

@@ -22,7 +22,7 @@ def predict_model(optimization_pass, device_type, device_id):
 
     predictor = pm.create_predictor(device_type, device_id)
 
-    print predictor.list_input_names()
+    print(predictor.list_input_names())
     #predictor.register_observers(['cost'])
 
     predictor.reshape_input('comm', comm_shape)
@@ -39,7 +39,7 @@ def predict_model(optimization_pass, device_type, device_id):
         predictor.forward()
         count += 1
         if count % 1000 == 0:
-            print 'qps=', count / (time.time() - start_time)
+            print('qps=', count / (time.time() - start_time))
             #print predictor.dump_observers()
 
 while True:

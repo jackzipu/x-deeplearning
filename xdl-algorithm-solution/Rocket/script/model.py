@@ -291,8 +291,8 @@ class Model(object):
 
     def run_test(self, test_ops, test_sess):
         if xdl.get_task_index() == 0 and test_ops is not None and test_sess is not None:
-            print('test_auc: %.4f ---- test_loss: %.4f ---- test_accuracy: %.4f ---- test_aux_loss: %.4f' %
-                  eval_model(test_sess, test_ops))
+            print(('test_auc: %.4f ---- test_loss: %.4f ---- test_accuracy: %.4f ---- test_aux_loss: %.4f' %
+                  eval_model(test_sess, test_ops)))
 
     def run(self, train_ops, train_sess, test_iter=100):
         step = 0
@@ -304,8 +304,8 @@ class Model(object):
                 loss, acc, aux_loss = values
                 step += 1
                 if (step % test_iter) == 0:
-                    print('step: %d ----> train_loss: %.4f ---- train_accuracy: %.4f ---- tran_aux_loss: %.4f' %
-                          (step, loss, acc, aux_loss))
+                    print(('step: %d ----> train_loss: %.4f ---- train_accuracy: %.4f ---- tran_aux_loss: %.4f' %
+                          (step, loss, acc, aux_loss)))
             train_sess._finish = False
 
 class Model_DIEN(Model):

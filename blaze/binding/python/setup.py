@@ -1,5 +1,5 @@
 """setup blaze package. """
-from __future__ import absolute_import
+
 import os
 import sys
 from setuptools import setup
@@ -12,7 +12,7 @@ exec(compile(open(libinfo_py, "rb").read(), libinfo_py, 'exec'), libinfo, libinf
 LIB_PATH = libinfo['find_lib_path']('blaze')
 __version__ = libinfo['__version__']
 
-print "AMS LIB_PATH=",LIB_PATH
+print("AMS LIB_PATH=",LIB_PATH)
 
 setup(name='pyblaze',
       version=__version__,

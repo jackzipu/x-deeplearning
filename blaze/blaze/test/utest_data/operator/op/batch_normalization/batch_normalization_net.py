@@ -23,4 +23,4 @@ normed = np.divide(z, s)
 x = np.multiply(normed, gamma)
 y = np.add(x, beta)
 
-print y
+print(y)

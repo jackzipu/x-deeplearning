@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 import time
 # import predict_pb2
 
@@ -38,16 +38,16 @@ json_req = '''
 
 def parseText():
     requrl = "http://127.0.0.1:8080/predict"
-    req = urllib2.Request(requrl, json_req)
-    res_data = urllib2.urlopen(req)
+    req = urllib.request.Request(requrl, json_req)
+    res_data = urllib.request.urlopen(req)
     res = res_data.read()
-    print res
+    print(res)
 
 def main():
         time1 = time.time()
         parseText()
         time2 = time.time()
-        print "rt: "+str((time2 - time1)*1000)+"ms"
+        print("rt: "+str((time2 - time1)*1000)+"ms")
 
 if __name__ == '__main__':
         main()

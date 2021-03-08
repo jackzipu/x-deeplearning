@@ -126,7 +126,7 @@ class TextFormatTest(unittest.TestCase):
     message.repeated_double.append(1.23e22)
     message.repeated_double.append(1.23e-18)
     message.repeated_string.append('\000\001\a\b\f\n\r\t\v\\\'"')
-    message.repeated_string.append(u'\u00fc\ua71f')
+    message.repeated_string.append('\u00fc\ua71f')
     self.CompareToGoldenText(
       self.RemoveRedundantZeros(text_format.MessageToString(message)),
       'repeated_int64: -9223372036854775808\n'
@@ -190,7 +190,7 @@ class TextFormatTest(unittest.TestCase):
     message.repeated_double.append(1.23e22)
     message.repeated_double.append(1.23e-18)
     message.repeated_string.append('\000\001\a\b\f\n\r\t\v\\\'"')
-    message.repeated_string.append(u'\u00fc\ua71f')
+    message.repeated_string.append('\u00fc\ua71f')
     self.CompareToGoldenText(
       self.RemoveRedundantZeros(
           text_format.MessageToString(message, as_one_line=True)),
@@ -211,30 +211,30 @@ class TextFormatTest(unittest.TestCase):
     message.repeated_double.append(1.23e22)
     message.repeated_double.append(1.23e-18)
     message.repeated_string.append('\000\001\a\b\f\n\r\t\v\\\'"')
-    message.repeated_string.append(u'\u00fc\ua71f')
+    message.repeated_string.append('\u00fc\ua71f')
 
     # Test as_utf8 = False.
     wire_text = text_format.MessageToString(
         message, as_one_line=True, as_utf8=False)
     parsed_message = unittest_pb2.TestAllTypes()
     text_format.Merge(wire_text, parsed_message)
-    self.assertEquals(message, parsed_message)
+    self.assertEqual(message, parsed_message)
 
     # Test as_utf8 = True.
     wire_text = text_format.MessageToString(
         message, as_one_line=True, as_utf8=True)
     parsed_message = unittest_pb2.TestAllTypes()
     text_format.Merge(wire_text, parsed_message)
-    self.assertEquals(message, parsed_message)
+    self.assertEqual(message, parsed_message)
 
   def testPrintRawUtf8String(self):
     message = unittest_pb2.TestAllTypes()
-    message.repeated_string.append(u'\u00fc\ua71f')
+    message.repeated_string.append('\u00fc\ua71f')
     text = text_format.MessageToString(message, as_utf8 = True)
     self.CompareToGoldenText(text, 'repeated_string: "\303\274\352\234\237"\n')
     parsed_message = unittest_pb2.TestAllTypes()
     text_format.Merge(text, parsed_message)
-    self.assertEquals(message, parsed_message)
+    self.assertEqual(message, parsed_message)
 
   def testMessageToString(self):
     message = unittest_pb2.ForeignMessage()
@@ -258,7 +258,7 @@ class TextFormatTest(unittest.TestCase):
 
     message = unittest_pb2.TestAllTypes()
     test_util.SetAllFields(message)
-    self.assertEquals(message, parsed_message)
+    self.assertEqual(message, parsed_message)
 
   def testMergeGoldenExtensions(self):
     golden_text = '\n'.join(self.ReadGolden(
@@ -268,7 +268,7 @@ class TextFormatTest(unittest.TestCase):
 
     message = unittest_pb2.TestAllExtensions()
     test_util.SetAllExtensions(message)
-    self.assertEquals(message, parsed_message)
+    self.assertEqual(message, parsed_message)
 
   def testMergeAllFields(self):
     message = unittest_pb2.TestAllTypes()
@@ -309,8 +309,8 @@ class TextFormatTest(unittest.TestCase):
     text_format.Merge(text, message)
     ext1 = unittest_mset_pb2.TestMessageSetExtension1.message_set_extension
     ext2 = unittest_mset_pb2.TestMessageSetExtension2.message_set_extension
-    self.assertEquals(23, message.message_set.Extensions[ext1].i)
-    self.assertEquals('foo', message.message_set.Extensions[ext2].str)
+    self.assertEqual(23, message.message_set.Extensions[ext1].i)
+    self.assertEqual('foo', message.message_set.Extensions[ext2].str)
 
   def testMergeExotic(self):
     message = unittest_pb2.TestAllTypes()
@@ -335,14 +335,14 @@ class TextFormatTest(unittest.TestCase):
     self.assertEqual(
         '\000\001\a\b\f\n\r\t\v\\\'"', message.repeated_string[0])
     self.assertEqual('foocorgegrault', message.repeated_string[1])
-    self.assertEqual(u'\u00fc\ua71f', message.repeated_string[2])
-    self.assertEqual(u'\u00fc', message.repeated_string[3])
+    self.assertEqual('\u00fc\ua71f', message.repeated_string[2])
+    self.assertEqual('\u00fc', message.repeated_string[3])
 
   def testMergeEmptyText(self):
     message = unittest_pb2.TestAllTypes()
     text = ''
     text_format.Merge(text, message)
-    self.assertEquals(unittest_pb2.TestAllTypes(), message)
+    self.assertEqual(unittest_pb2.TestAllTypes(), message)
 
   def testMergeInvalidUtf8(self):
     message = unittest_pb2.TestAllTypes()

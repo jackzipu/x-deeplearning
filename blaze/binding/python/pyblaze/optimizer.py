@@ -1,5 +1,5 @@
 # coding: utf-8
-from __future__ import absolute_import
+
 import ctypes
 
 from .base import LIB, check_call, c_str, c_array

@@ -38,7 +38,7 @@ def gen_attr(attr, name, attr_type):
     return gen_type_list(attr, name)
 
 def gen_str(attr, name):
-  if isinstance(attr, (str, unicode, bytes)):
+  if isinstance(attr, (str, bytes)):
     ret = pybind.AttrValue()
     ret.attr_type = pybind.AttrValue.Type.string
     ret.s = attr
@@ -56,7 +56,7 @@ def gen_bool(attr, name):
     raise ValueError("Cannot parse attr[{0}] type[{1}] to a bool attr".format(name, attr.__class__))
 
 def gen_int(attr, name):
-  if isinstance(attr, (int, long)):
+  if isinstance(attr, int):
     ret = pybind.AttrValue()
     ret.attr_type = pybind.AttrValue.Type.int
     ret.i = attr

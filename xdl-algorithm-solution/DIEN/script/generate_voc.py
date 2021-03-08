@@ -13,7 +13,7 @@
 # limitations under the License.
 # ==============================================================================
 
-import cPickle
+import pickle
 
 f_train = open("local_train_splitByUser", "r")
 uid_dict = {}
@@ -51,9 +51,9 @@ for line in f_train:
             cat_dict[c] = 0
         cat_dict[c] += 1
 
-sorted_uid_dict = sorted(uid_dict.iteritems(), key=lambda x:x[1], reverse=True)
-sorted_mid_dict = sorted(mid_dict.iteritems(), key=lambda x:x[1], reverse=True)
-sorted_cat_dict = sorted(cat_dict.iteritems(), key=lambda x:x[1], reverse=True)
+sorted_uid_dict = sorted(iter(uid_dict.items()), key=lambda x:x[1], reverse=True)
+sorted_mid_dict = sorted(iter(mid_dict.items()), key=lambda x:x[1], reverse=True)
+sorted_cat_dict = sorted(iter(cat_dict.items()), key=lambda x:x[1], reverse=True)
 
 uid_voc = {}
 index = 0
@@ -75,6 +75,6 @@ for key, value in sorted_cat_dict:
     cat_voc[key] = index
     index += 1
 
-cPickle.dump(uid_voc, open("uid_voc.pkl", "w"))
-cPickle.dump(mid_voc, open("mid_voc.pkl", "w"))
-cPickle.dump(cat_voc, open("cat_voc.pkl", "w"))
+pickle.dump(uid_voc, open("uid_voc.pkl", "w"))
+pickle.dump(mid_voc, open("mid_voc.pkl", "w"))
+pickle.dump(cat_voc, open("cat_voc.pkl", "w"))

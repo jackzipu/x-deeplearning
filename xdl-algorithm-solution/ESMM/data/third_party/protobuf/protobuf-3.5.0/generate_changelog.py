@@ -71,11 +71,11 @@ if len(sys.argv) < 2:
 previous = sys.argv[1]
 
 for language in languages:
-  print(language.name)
+  print((language.name))
   sys.stdout.flush()
   os.system(("git log --pretty=oneline --abbrev-commit %s...HEAD %s | " +
              "sed -e 's/^/ - /'") % (previous, " ".join(language.pathspec)))
   print("")
 
-print("To view a commit on GitHub: " +
-      "https://github.com/google/protobuf/commit/<commit id>")
+print(("To view a commit on GitHub: " +
+      "https://github.com/google/protobuf/commit/<commit id>"))

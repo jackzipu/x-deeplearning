@@ -109,7 +109,7 @@ class GradientCalc(object):
 
   def feed_output_list(self):
     ops = current_graph().ops()
-    for op in ops.values():
+    for op in list(ops.values()):
       for i in range(len(op.inputs)):
         self._output_list[op.inputs[i]].append((op, i))
 

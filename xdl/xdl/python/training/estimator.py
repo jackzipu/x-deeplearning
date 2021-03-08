@@ -44,7 +44,7 @@ class Estimator(object):
             auc_fn=auc,
             auc_interval=100,
             auc_bucket_num=200,
-            max_step=sys.maxint, 
+            max_step=sys.maxsize, 
             checkpoint_interval=None,
             log_format=LOG_FMT,
             user_hooks=None):
@@ -90,7 +90,7 @@ class Estimator(object):
                checkpoint_version="", 
                log_format=EVAL_LOG_FMT, 
                log_interval=100,
-               max_step=sys.maxint,
+               max_step=sys.maxsize,
                auc_fn=auc,
                auc_bucket_num=200,
                user_hooks=None):
@@ -135,7 +135,7 @@ class Estimator(object):
               checkpoint_version="", 
               log_format=PREDICT_LOG_FMT, 
               log_interval=100,
-              max_step=sys.maxint,
+              max_step=sys.maxsize,
               user_hooks=None):
     ''' 
     Args:
@@ -184,7 +184,7 @@ class Estimator(object):
                          log_interval=100,
                          log_format=LOG_FMT,
                          eval_log_format=EVAL_LOG_FMT,
-                         max_step=sys.maxint):
+                         max_step=sys.maxsize):
     with model_scope('train'):
       datas, labels = train_input_fn()
       train_outputs = self._model_fn(datas, labels)
@@ -231,14 +231,14 @@ class Estimator(object):
 
     lstep = 0
     while True:
-      print('\n>>> start train at local step[%d]\n' % lstep)
+      print(('\n>>> start train at local step[%d]\n' % lstep))
       while not train_sess.should_stop() and (lstep == 0 or lstep % eval_interval != 0) \
             and lstep < max_step:
         train_sess.run(train_op)
         lstep = lstep + 1
       lstep = lstep + 1
       eval_step = 0
-      print('\n>>> start evaluate at local step[%d]\n' % lstep)
+      print(('\n>>> start evaluate at local step[%d]\n' % lstep))
       while not eval_sess.should_stop() and eval_step < eval_steps:
         eval_sess.run([])
         eval_step = eval_step + 1

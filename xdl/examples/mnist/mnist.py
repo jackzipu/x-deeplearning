@@ -55,7 +55,7 @@ def train():
         for _ in range(1000):
             train_sess.run(train_op)
 
-        print("accuracy %s" % eval_sess.run(accuracy))
+        print(("accuracy %s" % eval_sess.run(accuracy)))
 
 
 def fc(inputs, w_shape, b_shape):

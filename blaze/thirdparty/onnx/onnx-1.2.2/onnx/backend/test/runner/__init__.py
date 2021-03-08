@@ -1,7 +1,7 @@
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
+
+
+
+
 
 from collections import defaultdict
 import functools
@@ -76,17 +76,17 @@ class Runner(object):
     def enable_report(self):  # type: () -> Runner
         import pytest  # type: ignore
 
-        for category, items_map in self._test_items.items():
-            for name, item in items_map.items():
+        for category, items_map in list(self._test_items.items()):
+            for name, item in list(items_map.items()):
                 item.func = pytest.mark.onnx_coverage(item.proto)(item.func)
         return self
 
     @property
     def _filtered_test_items(self):  # type: () -> Dict[Text, Dict[Text, TestItem]]
         filtered = {}  # type: Dict[Text, Dict[Text, TestItem]]
-        for category, items_map in self._test_items.items():
+        for category, items_map in list(self._test_items.items()):
             filtered[category] = {}
-            for name, item in items_map.items():
+            for name, item in list(items_map.items()):
                 if (self._include_patterns and
                     (not any(include.search(name)
                              for include in self._include_patterns))):
@@ -110,7 +110,7 @@ class Runner(object):
             globals().update(BackendTest(backend).test_cases)
         '''
         test_cases = {}
-        for category, items_map in self._filtered_test_items.items():
+        for category, items_map in list(self._filtered_test_items.items()):
             test_case_name = str('OnnxBackend{}Test').format(category)
             test_case = self._get_test_case(test_case_name)
             for name, item in sorted(items_map.items()):

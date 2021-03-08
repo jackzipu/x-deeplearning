@@ -81,7 +81,7 @@ def train(is_training=True):
                              namenode="hdfs://your/namenode/hdfs/path:9000", enable_state=False)
 
         feature_count = 69
-        for i in xrange(1, feature_count + 1):
+        for i in range(1, feature_count + 1):
             data_io.feature(name=("item_%s" % i), type=xdl.features.sparse, table=1)
         data_io.feature(name="unit_id_expand", type=xdl.features.sparse, table=0)
 
@@ -94,7 +94,7 @@ def train(is_training=True):
         sharding = xdl.DataSharding(data_io.fs())
         sharding.add_path(data)
         paths = sharding.partition(rank=xdl.get_task_index(), size=xdl.get_task_num())
-        print 'train: sharding.partition() =', paths
+        print('train: sharding.partition() =', paths)
         data_io.add_path(paths)
         iop = xdl.GetIOP("TDMOP")
     else:
@@ -102,7 +102,7 @@ def train(is_training=True):
                              namenode="hdfs://your/namenode/hdfs/path:9000", enable_state=False)
 
         feature_count = 69
-        for i in xrange(1, feature_count + 1):
+        for i in range(1, feature_count + 1):
             data_io.feature(name=("item_%s" % i), type=xdl.features.sparse, table=1)
         data_io.feature(name="unit_id_expand", type=xdl.features.sparse, table=0)
         data_io.feature(name="test_unit_id", type=xdl.features.sparse, table=1)
@@ -114,7 +114,7 @@ def train(is_training=True):
         base_path = '%s/%s/' % (conf('upload_url'), conf('data_dir'))
         data = base_path + conf('test_sample')
         data_io.add_path(data)
-        print 'predict: add_path =', data
+        print('predict: add_path =', data)
         iop = xdl.GetIOP("TDMPREDICTOP")
         #data_io.finish_delay(True)
     assert iop is not None
@@ -151,7 +151,7 @@ def train(is_training=True):
         feature_add_probability = 0.
     import xdl.python.sparse_engine.embedding as embedding
     emb_name = "item_emb"
-    for i in xrange(1, feature_count + 1):
+    for i in range(1, feature_count + 1):
         eb = xdl.embedding(emb_name, batch["item_%s" % i], xdl.Normal(stddev=0.001), emb_dim, 50000, emb_combiner, vtype="hash", feature_add_probability=feature_add_probability)
         with xdl.device('GPU'):
             eb_take = xdl.take_op(eb, batch["indicators"][0])
@@ -164,7 +164,7 @@ def train(is_training=True):
         # 把用户输入按fea_groups划分窗口，窗口内做avg pooling
         fea_groups = [int(s) for s in fea_groups.split(',')]
         total_group_length = np.sum(np.array(fea_groups))
-        print "fea_groups", fea_groups, "total_group_length", total_group_length, "eb_dim", eb_dim
+        print("fea_groups", fea_groups, "total_group_length", total_group_length, "eb_dim", eb_dim)
         user_input_before_reshape = mx.sym.concat(*user_input)
         user_input = mx.sym.reshape(user_input_before_reshape, shape=(-1, total_group_length, eb_dim))
 
@@ -263,15 +263,15 @@ def train(is_training=True):
     if not is_training:
         urun_re = iop.urun({"get_level_ids": key_value["start_sample_layer"]})
         item_num = len(urun_re)
-        item_ids = np.array([int(iid) for iid in urun_re.keys()], dtype=np.int64).reshape((item_num, 1))
-        print 'item_ids shape: '
-        print item_ids.shape
+        item_ids = np.array([int(iid) for iid in list(urun_re.keys())], dtype=np.int64).reshape((item_num, 1))
+        print('item_ids shape: ')
+        print(item_ids.shape)
         zeros = np.zeros((item_num, 1), dtype=np.int64)
         hash_ids = np.concatenate((zeros, item_ids), axis=1)
         item_embeddings = xdl.execute(xdl.ps_sparse_pull_op(hash_ids, var_name="item_emb", var_type="hash", save_ratio=1.0, otype=xdl.DataType.float))
         item_embeddings = item_embeddings.transpose()
-        print 'item_embeddings shape: '
-        print item_embeddings.shape
+        print('item_embeddings shape: ')
+        print(item_embeddings.shape)
 
         hit_num_list = []
         precision_list = []
@@ -280,18 +280,18 @@ def train(is_training=True):
         user_idx = 1
 
     while not sess.should_stop():
-        print ">>>>>>>>>>>> %d >>>>>>>>>>>" % loop_num
+        print(">>>>>>>>>>>> %d >>>>>>>>>>>" % loop_num)
         begin_time = time.time()
-        for itr in xrange(200):
+        for itr in range(200):
             if is_training:
                 result = sess.run([train_op, xdl.get_collection(xdl.UPDATE_OPS)])
             else:
                 result = sess.run([user_vector, global_step.value, gt_ids, gt_segments])
             if result is None:
-                print "result is None, finished success."
+                print("result is None, finished success.")
                 break
             if not is_training:
-                print "global_step =", result[1]
+                print("global_step =", result[1])
                 batch_uv = result[0]
                 batch_gt = result[2]
                 batch_seg = result[3]
@@ -303,7 +303,7 @@ def train(is_training=True):
 
                 sorted_idx = sorted_idx[:, :int(key_value["pr_test_final_layer_retrieve_num"])]
                 gt_id_start_idx = 0
-                for i in xrange(len(batch_seg)):
+                for i in range(len(batch_seg)):
                     pred_set = set(item_ids[sorted_idx[i, :], 0])
                     gt_dict = {}
                     for gt in batch_gt[gt_id_start_idx:batch_seg[i], 1]:
@@ -341,13 +341,13 @@ def train(is_training=True):
 
                     gt_id_start_idx = batch_seg[i]
 
-                print "=================================================="
-                print 'predicted user num is: %d' % len(hit_num_list)
-                print 'gt num is: %f' % sum(gt_num_list)
-                print 'precision: %f' % (sum(precision_list) / len(hit_num_list))
-                print 'recall: %f' % (sum(recall_list) / len(hit_num_list))
-                print 'global recall: %f' % (sum(hit_num_list) / sum(gt_num_list))
-                print "=================================================="
+                print("==================================================")
+                print('predicted user num is: %d' % len(hit_num_list))
+                print('gt num is: %f' % sum(gt_num_list))
+                print('precision: %f' % (sum(precision_list) / len(hit_num_list)))
+                print('recall: %f' % (sum(recall_list) / len(hit_num_list)))
+                print('global recall: %f' % (sum(hit_num_list) / sum(gt_num_list)))
+                print("==================================================")
 
             loop_num += 1
         if loop_num > statis_begin_loop:
@@ -355,18 +355,18 @@ def train(is_training=True):
             #print 'batch_size = %d, qps = %f batch/s' % (data_io._batch_size, (loop_num - statis_begin_loop) / elapsed_time)
 
     if not is_training:
-        print "=================================================="
-        print 'predicted user num is: %d' % len(hit_num_list)
-        print 'gt num is: %f' % sum(gt_num_list)
-        print 'precision: %f' % (sum(precision_list) / len(hit_num_list))
-        print 'recall: %f' % (sum(recall_list) / len(hit_num_list))
-        print 'global recall: %f' % (sum(hit_num_list) / sum(gt_num_list))
-        print "=================================================="
+        print("==================================================")
+        print('predicted user num is: %d' % len(hit_num_list))
+        print('gt num is: %f' % sum(gt_num_list))
+        print('precision: %f' % (sum(precision_list) / len(hit_num_list)))
+        print('recall: %f' % (sum(recall_list) / len(hit_num_list)))
+        print('global recall: %f' % (sum(hit_num_list) / sum(gt_num_list)))
+        print("==================================================")
 
     if is_training:
         xdl.execute(xdl.ps_synchronize_leave_op(np.array(xdl.get_task_index(), dtype=np.int32)))
         if xdl.get_task_index() == 0:
-            print 'start put item_emb'
+            print('start put item_emb')
 
             def _string_to_int8(src):
                 return np.array([ord(ch) for ch in src], dtype=np.int8)
@@ -380,7 +380,7 @@ def train(is_training=True):
             shell_cmd("hadoop fs -get %s/item_emb data/item_emb" % output_dir)
             shell_cmd("sed -i 's/..//' data/item_emb")
             shell_cmd("hadoop fs -put -f data/item_emb %s" % output_dir)
-            print 'finish put item_emb'
+            print('finish put item_emb')
         #print 'before worker barrier'
         #xdl.execute(xdl.worker_barrier_op(np.array(xdl.get_task_index(), dtype=np.int32), np.array(xdl.get_task_num(), dtype=np.int32)))
         #print 'after worker barrier'

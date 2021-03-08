@@ -111,8 +111,8 @@ def test(train_file=train_file,
     test_ops = tf_test_model(
         *model.xdl_embedding(datas, EMBEDDING_DIM, LIGHT_EMBEDDING_DIM, *sample_io.get_n()))
     eval_sess = xdl.TrainSession()
-    print('test_auc: %.4f ----test_loss: %.4f ---- test_accuracy: %.4f ---- test_aux_loss: %.4f' %
-          eval_model(eval_sess, test_ops))
+    print(('test_auc: %.4f ----test_loss: %.4f ---- test_accuracy: %.4f ---- test_aux_loss: %.4f' %
+          eval_model(eval_sess, test_ops)))
 
 if __name__ == '__main__':
     SEED = xdl.get_config("seed")

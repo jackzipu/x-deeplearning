@@ -1,7 +1,7 @@
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
+
+
+
+
 
 from collections import defaultdict
 import os
@@ -79,10 +79,10 @@ class Coverage(object):
         writer.write('------------------------------------\n')
 
         rows = []
-        for op_cov in self.buckets['passed'].values():
+        for op_cov in list(self.buckets['passed'].values()):
             covered_attrs = [
                 '{}: {}'.format(attr_cov.name, len(attr_cov.values))
-                for attr_cov in op_cov.attr_coverages.values()]
+                for attr_cov in list(op_cov.attr_coverages.values())]
             uncovered_attrs = [
                 '{}: 0'.format(attr)
                 for attr in op_cov.schema.attributes

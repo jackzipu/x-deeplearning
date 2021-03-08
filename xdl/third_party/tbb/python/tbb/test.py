@@ -49,7 +49,7 @@
 # SUCH DAMAGE.
 #
 
-from __future__ import print_function
+
 import time
 import threading
 
@@ -99,8 +99,8 @@ def test(arg=None):
     # basic tests
     result = pool.apply_async(f, (10,))  # evaluate "f(10)" asynchronously
     assert result.get(timeout=1) == 100  # ... unless slow computer
-    assert list(pool.map(f, range(10))) == list(map(f, range(10)))
-    it = pool.imap(f, range(10))
+    assert list(pool.map(f, list(range(10)))) == list(map(f, list(range(10))))
+    it = pool.imap(f, list(range(10)))
     assert next(it) == 0
     assert next(it) == 1
     assert next(it) == 4
@@ -119,15 +119,15 @@ def test(arg=None):
         say("Result ready: %s" % s)
 
     # Test imap()
-    assert list(pool.imap(work, range(10, 3, -1), chunksize=4)) == list(map(
-        str, range(10, 3, -1)))
+    assert list(pool.imap(work, list(range(10, 3, -1)), chunksize=4)) == list(map(
+        str, list(range(10, 3, -1))))
 
     # Test imap_unordered()
-    assert sorted(pool.imap_unordered(work, range(10, 3, -1))) == sorted(map(
-        str, range(10, 3, -1)))
+    assert sorted(pool.imap_unordered(work, list(range(10, 3, -1)))) == sorted(map(
+        str, list(range(10, 3, -1))))
 
     # Test map_async()
-    result = pool.map_async(work, range(10), callback=cb)
+    result = pool.map_async(work, list(range(10)), callback=cb)
     try:
         result.get(timeout=0.01)  # raises `TimeoutError`
     except TimeoutError:
@@ -137,7 +137,7 @@ def test(arg=None):
     say(result.get())
 
     # Test imap_async()
-    result = pool.imap_async(work, range(3, 10), callback=cb)
+    result = pool.imap_async(work, list(range(3, 10)), callback=cb)
     try:
         result.get(timeout=0.01)  # raises `TimeoutError`
     except TimeoutError:
@@ -151,7 +151,7 @@ def test(arg=None):
         say("Item2:", i)
 
     # Test imap_unordered_async()
-    result = pool.imap_unordered_async(work, range(10, 3, -1), callback=cb)
+    result = pool.imap_unordered_async(work, list(range(10, 3, -1)), callback=cb)
     try:
         say(result.get(timeout=0.01))  # raises `TimeoutError`
     except TimeoutError:
@@ -175,7 +175,7 @@ def test(arg=None):
     #
 
     # Exceptions in imap_unordered_async()
-    result = pool.imap_unordered_async(work, range(2, -10, -1), callback=cb)
+    result = pool.imap_unordered_async(work, list(range(2, -10, -1)), callback=cb)
     time.sleep(3)
     try:
         for i in result.get():
@@ -184,7 +184,7 @@ def test(arg=None):
         say("Good. Got expected exception")
 
     # Exceptions in imap_async()
-    result = pool.imap_async(work, range(2, -10, -1), callback=cb)
+    result = pool.imap_async(work, list(range(2, -10, -1)), callback=cb)
     time.sleep(3)
     try:
         for i in result.get():

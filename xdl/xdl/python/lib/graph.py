@@ -66,7 +66,7 @@ class Graph(object):
       old_device = self._device
       ret = pybind.DeviceDef()
       ret.device_name = device_name.upper()
-      for k, v in kwargs.items():
+      for k, v in list(kwargs.items()):
         ret.attr[k] = str(v)
       self._device = ret
       yield
@@ -143,7 +143,7 @@ class Graph(object):
     real_attrs = {}
     for attr in op_def.attrs:
       attr_hint[attr.name] = attr.type
-    for k, v in attrs.items():
+    for k, v in list(attrs.items()):
       real_attrs[k] = gen_attr(v, k, attr_hint[k])
     node = pybind.NodeDef()
     node.name = name
@@ -153,7 +153,7 @@ class Graph(object):
     for i in real_inputs:
       node.input.append(i)
     node.device = self._device
-    for k, v in real_attrs.items():
+    for k, v in list(real_attrs.items()):
       node.attr[k] = v
     self.add_node_internal(node, self._level)
     op = Op(inputs, attrs, name, op_def.name, node.device.device_name)
@@ -177,12 +177,12 @@ class Graph(object):
   def execute(self, outputs, run_option=None, run_statistic=None):
     if run_option and run_option.perf:
       if run_statistic is None:
-        raise 'run_statistic must be specified when perf is turned on'
+        raise Exception('run_statistic must be specified when perf is turned on')
     output_define = []
     def recursive_feed_output(x, k):
       if isinstance(x, Tensor):
         x = x.define
-      if isinstance(x, (str, unicode)):
+      if isinstance(x, str):
         output_define.append(x)
         if x[0] == '^':
           return None, k
@@ -215,7 +215,7 @@ class Graph(object):
     def recursive_build_result(x):
       if x is None:
         return None
-      if isinstance(x, (int, long)):
+      if isinstance(x, int):
         return numpy.array(outputs[x], copy = False)
       elif isinstance(x, (list, tuple, set)):
         rst = []

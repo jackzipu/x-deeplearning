@@ -1,5 +1,5 @@
 # coding: utf-8
-from __future__ import absolute_import
+
 import ctypes
 import numpy as np
 
@@ -121,7 +121,7 @@ class Predictor(object):
                                                     ctypes.byref(pkey),
                                                     ctypes.byref(pvalue)))
         omap = { }
-        for x in xrange(ndim.value):
+        for x in range(ndim.value):
             omap[pkey[x]] = pvalue[x]
         return omap
 

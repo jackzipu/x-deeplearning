@@ -65,12 +65,12 @@ def add_include(f, includes):
 
 def trace_verbose(*params):
     if config.debug > 1:
-        print(''.join(params))
+        print((''.join(params)))
 
 
 def trace_err(*params):
     if config.debug > 0:
-        print(current_file + ':' + ''.join(params))
+        print((current_file + ':' + ''.join(params)))
 
 
 def valid_type(param):
@@ -433,7 +433,7 @@ def parse_file(param, combined):
         json_data.close()
     except:
         type, value, tb = sys.exc_info()
-        print("Bad formatted JSON file '" + param + "' error ", value.message)
+        print(("Bad formatted JSON file '" + param + "' error ", value.message))
         sys.exit(-1)
     try:
         base_file_name = get_base_name(param)
@@ -448,7 +448,7 @@ def parse_file(param, combined):
         create_h_file(data, hfile_name, api_name, init_method, base_api)
     except:
         type, value, tb = sys.exc_info()
-        print("Error while parsing JSON file '" + param + "' error ", value.message)
+        print(("Error while parsing JSON file '" + param + "' error ", value.message))
         sys.exit(-1)
 
 if "indir" in config and config.indir != '':

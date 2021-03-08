@@ -61,7 +61,7 @@ def realtime_shell(cmd):
         logger.debug("run cmd %s, rc:%s.",
                      "success" if rc == 0 else "fail", rc)
         return rc
-    except Exception, msg:
+    except Exception as msg:
         logger.error("run cmd faild, rc:%s, err_msg:%s", rc, str(msg))
         return 1
 
@@ -372,9 +372,9 @@ def din_fcn_attention(query, facts, attention_size, mask, stag='null', mode='SUM
     mask = tf.equal(mask, tf.ones_like(mask))
     # D value - hidden size of the RNN layer
     facts_size = facts.get_shape().as_list()[-1]
-    print("facts_size %s" % facts_size)
+    print(("facts_size %s" % facts_size))
     querry_size = query.get_shape().as_list()[-1]
-    print("querry_size %s" % querry_size)
+    print(("querry_size %s" % querry_size))
     #tf.truncated_normal_initializer(dtype=tf.float32, stddev=0.36, seed=3)
     query = tf.layers.dense(
         query, facts_size, activation=None, kernel_initializer=get_tf_initializer(), name='f1' + stag)

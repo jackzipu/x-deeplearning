@@ -15,4 +15,4 @@ b = [[[0.2, 0.3],
       [0.2, 0.3]]]
 
 c = np.concatenate([a, b], axis=1)
-print c
+print(c)

@@ -225,32 +225,27 @@ DESCRIPTOR.message_types_by_name['TreeMeta'] = _TREEMETA
 DESCRIPTOR.message_types_by_name['Node'] = _NODE
 DESCRIPTOR.message_types_by_name['KVItem'] = _KVITEM
 
-class IdCodePair(message.Message):
-  __metaclass__ = reflection.GeneratedProtocolMessageType
+class IdCodePair(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
   DESCRIPTOR = _IDCODEPAIR
   
   # @@protoc_insertion_point(class_scope:util.IdCodePair)
 
-class IdCodePart(message.Message):
-  __metaclass__ = reflection.GeneratedProtocolMessageType
+class IdCodePart(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
   DESCRIPTOR = _IDCODEPART
   
   # @@protoc_insertion_point(class_scope:util.IdCodePart)
 
-class TreeMeta(message.Message):
-  __metaclass__ = reflection.GeneratedProtocolMessageType
+class TreeMeta(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
   DESCRIPTOR = _TREEMETA
   
   # @@protoc_insertion_point(class_scope:util.TreeMeta)
 
-class Node(message.Message):
-  __metaclass__ = reflection.GeneratedProtocolMessageType
+class Node(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
   DESCRIPTOR = _NODE
   
   # @@protoc_insertion_point(class_scope:util.Node)
 
-class KVItem(message.Message):
-  __metaclass__ = reflection.GeneratedProtocolMessageType
+class KVItem(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
   DESCRIPTOR = _KVITEM
   
   # @@protoc_insertion_point(class_scope:util.KVItem)

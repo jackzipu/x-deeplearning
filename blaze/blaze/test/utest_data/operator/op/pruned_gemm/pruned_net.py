@@ -30,5 +30,5 @@ o1 = np.matmul(a, w1)
 o2 = np.matmul(b, w2)
 output = np.add(o1, o2)
 output = np.add(output, bias)
-print output
+print(output)
 

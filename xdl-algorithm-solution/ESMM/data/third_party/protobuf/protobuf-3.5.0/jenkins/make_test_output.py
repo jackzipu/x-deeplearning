@@ -79,7 +79,7 @@ def readtests(basedir):
     tests["cpp"]["time"] = f.read().strip()
   tests["cpp"]["failure"] = False
 
-  ret = tests.values()
+  ret = list(tests.values())
   ret.sort(key=lambda x: x["name"])
 
   return ret
@@ -106,4 +106,4 @@ def genxml(tests):
 
 sys.stderr.write("make_test_output.py: writing XML from directory: " +
                  sys.argv[1] + "\n")
-print(genxml(readtests(sys.argv[1])))
+print((genxml(readtests(sys.argv[1]))))

@@ -15,7 +15,7 @@
 
 import numpy
 import json
-import cPickle as pkl
+import pickle as pkl
 import random
 import gzip
 import shuffle
@@ -23,7 +23,7 @@ from tensorflow.python.lib.io import file_io
 
 
 def unicode_to_utf8(d):
-    return dict((key.encode("UTF-8"), value) for (key, value) in d.items())
+    return dict((key.encode("UTF-8"), value) for (key, value) in list(d.items()))
 
 
 def fopen(filename, mode='r'):
@@ -119,7 +119,7 @@ class DataIterator:
         else:
             self.source.seek(0)
 
-    def next(self):
+    def __next__(self):
         if self.end_of_data:
             self.end_of_data = False
             self.reset()
@@ -129,7 +129,7 @@ class DataIterator:
         target = []
 
         if len(self.source_buffer) == 0:
-            for k_ in xrange(self.k):
+            for k_ in range(self.k):
                 ss = self.source.readline()
                 if ss == "":
                     break
@@ -217,6 +217,6 @@ class DataIterator:
 
         # all sentence pairs in maxibatch filtered out because of length
         if len(source) == 0 or len(target) == 0:
-            source, target = self.next()
+            source, target = next(self)
 
         return source, target

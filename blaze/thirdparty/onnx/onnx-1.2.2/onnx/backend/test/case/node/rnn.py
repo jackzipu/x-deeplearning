@@ -1,7 +1,7 @@
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
+
+
+
+
 
 import numpy as np  # type: ignore
 from typing import Any, Tuple
@@ -27,7 +27,7 @@ class RNN_Helper():
         self.num_directions = params[str(W)].shape[0]
 
         if self.num_directions == 1:
-            for k in params.keys():
+            for k in list(params.keys()):
                 if k != X:
                     params[k] = np.squeeze(params[k], axis=0)
 

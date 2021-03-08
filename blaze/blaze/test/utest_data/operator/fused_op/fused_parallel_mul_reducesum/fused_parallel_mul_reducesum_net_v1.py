@@ -26,4 +26,4 @@ b = [[[1.2, 2.4],
 
 s = np.multiply(a, b)
 
-print np.sum(s, axis=1)
+print(np.sum(s, axis=1))

@@ -57,7 +57,7 @@ class SampleIO(object):
 
     def _next_train(self):
         try:
-            src, tgt = self.train_data.next()
+            src, tgt = next(self.train_data)
         except StopIteration:
             self.src = self.tgt = None
             raise OutOfRange("train end")
@@ -65,7 +65,7 @@ class SampleIO(object):
 
     def _next_test(self):
         try:
-            src, tgt = self.test_data.next()
+            src, tgt = next(self.test_data)
         except StopIteration:
             self.src = self.tgt = None
             raise OutOfRange("test end")

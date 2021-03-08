@@ -68,9 +68,9 @@ def on_label(n):
     return out
 
 for i in range(N):
-    print "skey%d|gkey%d|%s|%s|%s|%d"%(i, i,
+    print("skey%d|gkey%d|%s|%s|%s|%d"%(i, i,
                                        on_feature_line("user", N_SPARSE, 4, True)
                                        + ";" + on_feature_line("user_img", 1, 31, True),
                                        on_feature_line("ad", N_DENSE, 1, False)
                                        + ";" + on_feature_line("ad_img", 1, 1, True),
-                                       on_label(N_LABEL), time.time())
+                                       on_label(N_LABEL), time.time()))

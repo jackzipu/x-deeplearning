@@ -106,7 +106,7 @@ class ReaderStateHook(Hook):
         pb = self._data_io.serialize_state()
         state = _save(pb, _STATE_SIZE)
         if np.equal(state, self._last_state).all():
-          print "state equal to last, skip save ..."
+          print("state equal to last, skip save ...")
           return
         self._last_state = state
         update_op = xdl.ps_sparse_assign_op(

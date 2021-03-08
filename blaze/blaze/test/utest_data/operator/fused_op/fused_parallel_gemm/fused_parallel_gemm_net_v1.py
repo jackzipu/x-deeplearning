@@ -25,5 +25,5 @@ bias = [[[0.1, 0.2, 0.3]],
         [[2.1, 2.2, 3.2]]]
 
 c = np.matmul(a, b)
-print c
-print np.add(c, bias)
+print(c)
+print(np.add(c, bias))

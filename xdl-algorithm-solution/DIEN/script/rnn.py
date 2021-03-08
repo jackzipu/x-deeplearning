@@ -38,9 +38,9 @@
 @@static_state_saving_rnn
 @@static_bidirectional_rnn
 """
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+
+
+
 
 from tensorflow.python.framework import constant_op
 from tensorflow.python.framework import dtypes

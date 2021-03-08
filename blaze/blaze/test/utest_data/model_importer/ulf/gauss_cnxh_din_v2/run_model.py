@@ -16,9 +16,9 @@ def read_tensor(filename, np_array):
     with open(filename) as f:
         content = f.readline()
         values = content.split(',')
-        for k in xrange(len(values) - 1):
+        for k in range(len(values) - 1):
             np_array[0][k] = float(values[k])
-        print 'size=', len(values)
+        print('size=', len(values))
 
 read_tensor('./comm.txt', comm)
 read_tensor('./ncomm.txt', ncomm)
@@ -33,8 +33,8 @@ def predict_model(optimization_pass, device_type, device_id):
 
     predictor = pm.create_predictor(device_type, device_id)
 
-    print predictor.list_input_names()
-    print predictor.list_internal_names()
+    print(predictor.list_input_names())
+    print(predictor.list_internal_names())
     predictor.register_observers(['cost'])
 
     predictor.reshape_input('comm', comm_shape)
@@ -46,9 +46,9 @@ def predict_model(optimization_pass, device_type, device_id):
     predictor.feed('att_comm', att_comm)
 
     predictor.forward()
-    print predictor.output_asnumpy('output')
+    print(predictor.output_asnumpy('output'))
     predictor.forward()
-    print predictor.output_asnumpy('output')
+    print(predictor.output_asnumpy('output'))
     return predictor.output_asnumpy('output')
 
 ### CPU No-OptPass
@@ -58,4 +58,4 @@ res0 = predict_model(0, 0, 0)
 res1 = predict_model(1, 1, 0)
 #print res1
 res1 = predict_model(1, 1, 0)
-print res1
+print(res1)

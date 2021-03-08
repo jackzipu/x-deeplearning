@@ -16,7 +16,7 @@
 import struct
 import random
 
-ids = range(1, 4097)
+ids = list(range(1, 4097))
 record_size = 4096
 
 def record(i):
