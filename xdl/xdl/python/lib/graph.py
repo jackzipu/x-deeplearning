@@ -137,28 +137,21 @@ class Graph(object):
     real_inputs = []
     for i in inputs:
       real_inputs.append(i.define)
-      #print(f'The define in the input is {i.define}')
     for i in self._control_dependencies:
       real_inputs.append(i.op.depend().define)
-      #print(f'The control dependency is {i.op.depend().define}')
     attr_hint = {}
     real_attrs = {}
     for attr in op_def.attrs:
       attr_hint[attr.name] = attr.type
-      #print(f'The attr name is {attr.name} and attr.type is {attr.type}')
     for k, v in list(attrs.items()):
       real_attrs[k] = gen_attr(v, k, attr_hint[k])
     node = pybind.NodeDef()
     node.name = name
-    #print(f'The node name is {node.name}')
     node.op = op_def.name
-    #print(f'The node op name is {node.op}')
     for i in output_types:
       node.output_type.append(i)
-      #print('The output types: {i}')
     for i in real_inputs:
       node.input.append(i)
-      #print(f'The real inputs: {i}')
     node.device = self._device
     for k, v in list(real_attrs.items()):
       node.attr[k] = v
@@ -214,17 +207,7 @@ class Graph(object):
     xdl_output_spec.output = pybind.StringVector(output_define)
     xdl_output_spec.output_device = Graph.default_device()
     run_option = run_option if run_option is not None else pybind.RunOption()
-    #print(f'We should check the passed in value here and check it again in the cpp')
-    print('-----------------------------------graph.py-----------------------------------------')
-    for node in self._graph_def.node:
-        print(f'The node name is {node.name}, op: {node.op}, where the others are structures')
-        for k,v in node.attr.items():
-            if k == 'value':
-                print(f'The value of the attr is {k}, {v}')
-    print('-----------------------------------graph.py end------------------------------------')
-    print('Before execute the pybind.execute')
     result = pybind.execute(self._graph_def, xdl_output_spec, run_option)
-    print('After execute the pybind.execute, is the print in the executor_wrapper.cc out?')
     check_error(result.status)
     outputs = result.outputs
     if run_option and run_option.perf:
