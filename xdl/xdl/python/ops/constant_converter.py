@@ -39,7 +39,9 @@ def converter(t):
   npt = np.array(t)
   shape = list(npt.shape)
   dtype = dtype_np_2_xdl(npt.dtype)
-  b = str(npt.data)
+  # Use the tobytes as in python3 the npt.data returned as memoryview instead of 
+  # buffer in python2.7
+  b = npt.data.tobytes()
   return _constant(dtype, shape, b)
 
 register_converter(int)(converter)

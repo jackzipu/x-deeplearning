@@ -194,9 +194,9 @@ def op_generate(opdef):
         if i.type == pybind.AttrValue.Type.none:
           raise ValueError("Attr Type should not be none")
         elif i.type == pybind.AttrValue.Type.string:
-          _generate_check_attr(builder, i.name, "(str, unicode, bytes)")
+          _generate_check_attr(builder, i.name, "(str, bytes)")
         elif i.type == pybind.AttrValue.Type.int:
-          _generate_check_attr(builder, i.name, "(int, long)")
+          _generate_check_attr(builder, i.name, "(int)")
         elif i.type == pybind.AttrValue.Type.float:
           _generate_check_attr(builder, i.name, "(float)")
         elif i.type == pybind.AttrValue.Type.bool:

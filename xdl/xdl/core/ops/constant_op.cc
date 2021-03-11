@@ -16,6 +16,8 @@ limitations under the License.
 #include "xdl/core/framework/op_kernel.h"
 #include "xdl/core/framework/op_define.h"
 #include "xdl/core/framework/op_registry.h"
+#include <iostream>
+#include <stdio.h>
 
 namespace xdl {
 
@@ -26,7 +28,15 @@ class ConstantOp : public OpKernel {
     TensorShape shape;
     std::string value;
     XDL_CHECK_STATUS(ctx->GetAttr("shape", &shape));
+    std::cout << "What a shape " << shape << std::endl;
     XDL_CHECK_STATUS(ctx->GetAttr("value", &value));
+    std::cout << "What a value " << value << std::endl;
+    //std::cout << "shape.NumElements() is: " << static_cast<unsigned>(shape.NumElements()) << std::endl;
+    printf("Can we print the shape.NumElements() here ? %ld\n", shape.NumElements());
+    printf(" And value.size() is: %ld\n", value.size());
+    printf("===============================================================\n");
+    printf("shape.NumElements() * sizeof(T) is: %ld, And value.size() is: %ld\n", shape.NumElements() * sizeof(T), value.size());
+    printf("===============================================================\n");
     XDL_CHECK_COND(shape.NumElements() * sizeof(T) == value.size(),
                    Status::ArgumentError("shape is not equal to value"));
     tensor_ = Tensor(ctx->GetDevice(), shape, DataTypeToEnum<T>::v());

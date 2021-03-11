@@ -27,7 +27,7 @@ LIB = ctypes.CDLL(_LIB_NAME)
 
 def connect_to_client(client_addr, ckpt_path, retry_cnt=6):
     i = 0
-    while not LIB.TFPS_CONNECT_TO_CLIENT(str(client_addr), str(ckpt_path)) and i < retry_cnt:
+    while not LIB.TFPS_CONNECT_TO_CLIENT(str(client_addr).encode("utf-8"), str(ckpt_path).encode("utf-8")) and i < retry_cnt:
         i = i + 1
         time.sleep(30)
     if i == retry_cnt:
