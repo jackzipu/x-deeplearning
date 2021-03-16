@@ -80,19 +80,27 @@ class _PyFuncOp : public OpKernel {
     return Status::Ok();
   }
   Status Compute(OpKernelContext* ctx) override {
+    printf("======> Enter the _PyFuncOp:Compute and the ctx value is : {%d}\n", ctx);
     std::vector<Tensor> inputs;
     XDL_CHECK_STATUS(ctx->GetInputList("input", &inputs));
+    printf("=====> Will lock the mutex, ctx value is {%d}\n", ctx);
     std::unique_lock<std::mutex> lock(PyObjectManager::Instance()->Mutex());
+    printf("=====> Already lock the mutex, ctx value is {%d}\n", ctx);
+    printf("=====> Callling pybind11::object obj_result = obj_(inputs), problem seemed here, ctx value is {%d}\n", ctx);
     pybind11::object obj_result = obj_(inputs);
+    printf("... called pybind11::object obj_result = obj_(inputs), ctx value is {%d}\n", ctx);
+    printf("=====> Before pybind11::cast<PyFuncResult*>(obj_result), ctx value is {%d}\n", ctx);
     PyFuncResult* result = pybind11::cast<PyFuncResult*>(obj_result);
     XDL_CHECK_STATUS(result->status);
     std::vector<Tensor> outputs;
     XDL_CHECK_COND(result->result.size() == output_type_.size(),
         Status::ArgumentError("PyFunc Run Error, return size mismatch"));
+    printf("Before the first loop and ctx value is {%d}\n", ctx);
     for (size_t i = 0; i < result->result.size(); i++) {
       XDL_CHECK_COND(result->result[i].type == output_type_[i],
         Status::ArgumentError("PyFunc Run Error, return type mismatch"));
     }
+    printf("Before the second loop and ctx value is {%d}\n", ctx);
     for (auto&& buffer : result->result) {
       Tensor rst;
       XDL_CHECK_STATUS(ctx->Allocate(
@@ -101,7 +109,9 @@ class _PyFuncOp : public OpKernel {
       memcpy(rst_buffer->begin(), &buffer.buf[0], rst_buffer->size());
       outputs.push_back(rst);
     }
+    printf("After the second loop and ctx value is {%d}\n", ctx);
     XDL_CHECK_STATUS(ctx->SetOutputList("output", outputs));
+    printf("======> In _PyFuncOp:Compute and immediatelly return : {%d}\n", ctx);
     return Status::Ok();
   }
  private:

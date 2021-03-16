@@ -207,7 +207,16 @@ class Graph(object):
     xdl_output_spec.output = pybind.StringVector(output_define)
     xdl_output_spec.output_device = Graph.default_device()
     run_option = run_option if run_option is not None else pybind.RunOption()
+    #print('-----------------------------------graph.py-----------------------------------------')
+    #for node in self._graph_def.node:
+    #    print(f'The node name is {node.name}, op: {node.op}, where the others are structures')
+    #    for k,v in node.attr.items():
+    #        if k == 'value':
+    #            print(f'The value of the attr is {k}, {v}')
+    #print('-----------------------------------graph.py end------------------------------------')
+    print('Before calling the pybind.execute----------------------------------------------------')
     result = pybind.execute(self._graph_def, xdl_output_spec, run_option)
+    print('After the pybind.execute-------------------------------------------------------------')
     check_error(result.status)
     outputs = result.outputs
     if run_option and run_option.perf:

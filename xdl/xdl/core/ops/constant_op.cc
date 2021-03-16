@@ -35,7 +35,9 @@ class ConstantOp : public OpKernel {
   }
 
   Status Compute(OpKernelContext* ctx) override {
+    printf("=====> ConstantOp::Compute(OpKernelContext* ctx), The thread number is: %d\n",  ThreadPool::Global()->CurrentThreadId());
     XDL_CHECK_STATUS(ctx->SetOutput(0, tensor_));
+    printf("<===== ConstantOp::Compute(OpKernelContext* ctx), The thread number is: %d\n",  ThreadPool::Global()->CurrentThreadId());
     return Status::Ok();
   }
  private:

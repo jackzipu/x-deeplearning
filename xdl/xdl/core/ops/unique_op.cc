@@ -22,6 +22,7 @@
 #include <chrono>
 #include <vector>
 #include <utility>
+#include <stdio.h>
 
 namespace xdl {
 
@@ -34,6 +35,7 @@ class UniqueCpuOp : public OpKernel {
 template <typename T, typename I>
 Status UniqueCpuOp<T, I>::Compute(OpKernelContext* ctx) {
   //auto t0 = std::chrono::high_resolution_clock::now();
+  printf("=====> UniqueCpuOp<T, I>::Compute(OpKernelContext* ctx), The thread number is: %d\n",  ThreadPool::Global()->CurrentThreadId());
   Tensor input, segment, output, out_index, sample_index, sample_segment;
   XDL_CHECK_STATUS(ctx->GetInput(0, &input));
   XDL_CHECK_STATUS(ctx->GetInput(1, &segment));
@@ -51,6 +53,7 @@ Status UniqueCpuOp<T, I>::Compute(OpKernelContext* ctx) {
   //auto t1 = std::chrono::high_resolution_clock::now();
   //std::chrono::duration<double, std::milli> diff = t1 - t0;
   //LOG(INFO) << "cpu unique op time:" << diff.count() << "ms";
+  printf("<===== UniqueCpuOp<T, I>::Compute(OpKernelContext* ctx), The thread number is: %d\n",  ThreadPool::Global()->CurrentThreadId());
   return Status::Ok();
 }
 

@@ -20,6 +20,7 @@ limitations under the License.
 #include <thread>
 #include <dlfcn.h>
 #include <stdlib.h>
+#include <iostream>
 
 namespace xdl {
 
@@ -38,6 +39,7 @@ TFRunner::~TFRunner() {
 }
 
 Status TFRunner::Init(const std::string& graph_def_pb, float gpu_memory_fraction) {
+  std::cout << "====> TFRunner::Init, I don't know who call it" << std::endl;
   tensorflow::ConfigProto config;
   config.set_allow_soft_placement(true);
   config.set_intra_op_parallelism_threads(0);
@@ -59,20 +61,21 @@ Status TFRunner::Init(const std::string& graph_def_pb, float gpu_memory_fraction
     return Status::Internal("tf create session failed, errmsg:" + 
                             status.ToString());
   }
-  
+  std::cout << "<==== TFRunner::Init, I don't know who call it" << std::endl;
   return Status::Ok();
 }
 
 Status TFRunner::Run(const InputList &inputs,
                      const std::vector<std::string> &ops_names,
                      std::vector<tensorflow::Tensor>* outputs) {
+  std::cout << "=====> TFRunner::Run" << std::endl;
   tensorflow::Status status;
   status = session_->Run(inputs, ops_names, {}, outputs);
   if (!status.ok()) {
     return Status::Internal("tf session run failed, errormsg:" + 
                             status.error_message());
   }
-  
+  std::cout << "<===== TFRunner::Run" << std::endl;
   return Status::Ok();
 }
 
