@@ -61,7 +61,7 @@ def realtime_shell(cmd):
         logger.debug("run cmd %s, rc:%s.",
                      "success" if rc == 0 else "fail", rc)
         return rc
-    except Exception, msg:
+    except(Exception, msg):
         logger.error("run cmd faild, rc:%s, err_msg:%s", rc, str(msg))
         return 1
 

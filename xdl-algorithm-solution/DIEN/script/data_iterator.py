@@ -15,7 +15,7 @@
 
 import numpy
 import json
-import cPickle as pkl
+import pickle as pkl
 import random
 import gzip
 import shuffle
@@ -129,7 +129,7 @@ class DataIterator:
         target = []
 
         if len(self.source_buffer) == 0:
-            for k_ in xrange(self.k):
+            for k_ in range(self.k):
                 ss = self.source.readline()
                 if ss == "":
                     break
