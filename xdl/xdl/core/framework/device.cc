@@ -15,14 +15,12 @@ limitations under the License.
 
 #include "xdl/core/framework/device.h"
 #include "xdl/core/framework/op_kernel.h"
-#include <iostream>
 
 namespace xdl {
 
 void Device::ScheduleToRun(ThreadPool* tp, OpKernelBase* op,
                            OpKernelContext* ctx) {
   tp->Schedule([op, ctx]{
-    //std::cout << "In device.cc calling op->Launch with op type: " << typeid(*op).name() << std::endl;
     op->Launch(ctx);
   });
 }

@@ -23,7 +23,6 @@ limitations under the License.
 #include "xdl/core/ops/ps_ops/define_op.h"
 #include "xdl/core/backend/tf/tf_runner.h"
 #include "xdl/core/backend/tf/convert_utils.h"
-#include <thread>
 
 namespace xdl {
 
@@ -44,7 +43,6 @@ class TFBackendOp : public xdl::OpKernelAsync {
     input_op_names_ = StringUtils::split(input_op_name, ",");
     target_op_names_ = StringUtils::split(target_op_name, ",");
     gradient_op_names_ = StringUtils::split(gradient_op_name, ",");
-    std::cout << " The TFRunner::Init called here" << std::endl;
     local_init_op_names_ = StringUtils::split(local_init_op_name, ",");
     XDL_CHECK_STATUS(tf_runner_.Init(graph_def_, gpu_memory_fraction));
     XDL_CHECK_STATUS(InitLocalVariables());
@@ -55,7 +53,6 @@ class TFBackendOp : public xdl::OpKernelAsync {
     if (!local_init_op_names_.empty()) {
       TFRunner::InputList tf_inputs;      
       std::vector<tensorflow::Tensor> results;
-      std::cout << "In backend_op.cc InitLocalVariables() calling TFRunner.Run" << std::endl;
       XDL_CHECK_STATUS(tf_runner_.Run(tf_inputs, local_init_op_names_, &results));
     }
 
@@ -63,7 +60,6 @@ class TFBackendOp : public xdl::OpKernelAsync {
   }
 
   void Compute(OpKernelContext* ctx, Callback done) override {
-    std::cout << "backend_op.cc =====> Compute()" << std::endl;
     using TensorList = std::vector<Tensor>;
     TensorList inputs;
     XDL_CHECK_STATUS_ASYNC(ctx->GetInputList("inputs", &inputs), done);
@@ -89,12 +85,10 @@ class TFBackendOp : public xdl::OpKernelAsync {
                            gradient_op_names_.end());
     
 	results_.clear();
-    std::cout << "Calling the TFRunner.Run() here" << std::endl;
     XDL_CHECK_STATUS_ASYNC(
         tf_runner_.Run(tf_inputs, output_op_names, &results_), 
         done);
-    std::cout << "Callled the TFRunner.Run()" << std::endl;
-
+    
     TensorList outputs;
     for (size_t i = 0; i < target_op_size; ++i) {
       Tensor t;
@@ -114,7 +108,6 @@ class TFBackendOp : public xdl::OpKernelAsync {
 
     ctx->SetOutputList("gradients", gradients);
     done(Status::Ok());
-    std::cout << "backend_op.cc <===== Compute()" << std::endl;
   }
 
  private:

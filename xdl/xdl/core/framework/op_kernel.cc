@@ -20,7 +20,6 @@ limitations under the License.
 #include <vector>
 
 #include "xdl/core/utils/logging.h"
-#include <iostream>
 
 namespace xdl {
 
@@ -29,29 +28,17 @@ Status OpKernelBase::Init(OpKernelConstruction* ctx) {
 }
 
 void OpKernel::Launch(OpKernelContext* ctx) {
-  printf("========> In OpKernel::Launch calling Compute() with *ctx {%d}\n",ctx);
   Status status = Compute(ctx);
-  //Status status= Status::Ok();
-  printf("...Nothing to solve, just call the done and return");
-  printf("<======== In OpKernel::Launch, called Compute() with *ctx {%d}\n",ctx);
   ctx->LaunchDone(status);
   ctx->RunDone(Status::Ok());
 }
 
 void OpKernelAsync::Launch(OpKernelContext* ctx) {
-  std::cout << "=====> In OpKernelAsync::Launch calling Compute()" << std::endl;
-  /*
   Callback done = [ctx](Status st){
-    printf("...The thread [%d] done and callbacks added by  {OpKernelAsync::Launch} called\n", ThreadPool::Global()->CurrentThreadId());
     ctx->LaunchDone(st);
     ctx->RunDone(Status::Ok());
   };
   Compute(ctx, done);
-  */
-  printf("Skipped the running of Async, just to see whether the TFBackend can be called.");
-  ctx->LaunchDone(Status::Ok());
-  ctx->RunDone(Status::Ok());
-  std::cout << "<===== In OpKernelAsync::Launch calling Compute()" << std::endl;
 }
 
 Status OpKernelConstruction::GetAttr(const std::string& name,

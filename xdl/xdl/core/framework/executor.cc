@@ -20,7 +20,6 @@ limitations under the License.
 #include "xdl/core/framework/graph_cache.h"
 #include "xdl/core/framework/grappler.h"
 #include "xdl/core/framework/graph_builder.h"
-#include <iostream>
 
 namespace xdl {
 
@@ -28,7 +27,6 @@ void Executor::Run(const GraphDef& graph,
                    const OutputSpec& output,
                    const RunOption& run_option,
                    Callback done) {
-  std::cout << "====> Executor::Run in executor.cc" << std::endl;
   auto graph_creator = 
   [](const GraphDef& def, const OutputSpec& output, Graph** g) -> Status {
     GraphDef real_def = def;
@@ -48,9 +46,7 @@ void Executor::Run(const GraphDef& graph,
     done(build_status, std::vector<Tensor>(), SimpleExecutor::ExtraInfo());
     return;
   }
-  std::cout << "Calling SimpleExecutor::Run" << std::endl;
   SimpleExecutor::Run(g, run_option, done, thread_pool_);
-  std::cout << "<====  Executor::Run in executor.cc" << std::endl;
 }
 
 }  // namespace xdl

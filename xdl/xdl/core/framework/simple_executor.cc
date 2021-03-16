@@ -93,8 +93,6 @@ void SimpleExecutor::Launch(int node_id) {
   OpKernelContext* ctx = new OpKernelContext(&(graph_->nodes[node_id].arg),
                                              this,
                                              std::move(input_[node_id]));
-
-  printf("============== The ctx passing to Schedule is {%d}, nodename is {%s}, op_name is {%s} =================\n", ctx, graph_->nodes[node_id].name.c_str(), graph_->nodes[node_id].op_name.c_str());
   ctx->SetLaunchDone(
       [this, node_id, ctx](Status st){LaunchDone(node_id, ctx, st);});
   ctx->SetRunDone(
@@ -104,7 +102,7 @@ void SimpleExecutor::Launch(int node_id) {
     PerfSetNodeStart(node_id);
     PerfSetNameAndOp(node_id);
   }
-  //std::cout << "Now we are calling graph_->nodes[node_id].arg.device->ScheduleToRun in simple_executor.cc" << std::endl;
+
   graph_->nodes[node_id].arg.device->ScheduleToRun(
       thread_pool_, graph_->nodes[node_id].op.get(), ctx);
 }
@@ -250,7 +248,6 @@ void SimpleExecutor::UnRef(int node_id) {
 }
 
 void SimpleExecutor::DecreaseRunningCounter() {
-  printf("[ %d ] In SimpleExecutor::DecreaseRunningCounter(), The running_counter is: %d before the decreasement\n", ThreadPool::Global()->CurrentThreadId(), running_counter_.load());
   if (--running_counter_ == 0) {
     Done();
   }

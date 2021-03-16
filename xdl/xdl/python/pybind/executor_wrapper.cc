@@ -73,31 +73,9 @@ struct ExecuteLoopSpec {
 ExecuteResult Execute(const GraphDef& def, 
                       const OutputSpec& output,
                       const RunOption& run_option) {
-  /*
-  std::cout << "----------------------------------Print the parameters in executor_wrapper.cc----------------------------------------" << std::endl;
-  for(const auto& node_: def.node) {
-    for(const auto& map_: node_.attr){
-      //std::cout << "The key of attr is: " << map_.first << std::endl;
-      if(map_.first.compare("value") == 0){
-        if(map_.second.attr_type == AttrValue::kString){
-         std::cout << "The record with key [value], value [" << map_.second.s << "]" << std::endl;
-       }
-       else{
-         std::cout << "A record with key [value], value not a string." << std::endl;
-       }
-      }
-    }
-  }
-  std::cout << "----------------------------------------------------------------------------------------------" << std::endl;
-  */
-  //std::cout << "-------------------------------- GraphDef to string -----------------------------------" << std::endl;
-  //std::cout << def.ToProtoString() << std::endl;
-  //std::cout << "-------------------------------- End GraphDef to string -------------------------------" << std::endl;
-  //std::cout << "Enter the Execute in executor_wrapper.cc" << std::endl;
   static Executor executor(ThreadPool::Global());
   ExecuteResult ret;
   std::promise<int> result;
-  std::cout << "Calling ExecutorInstance::Instance()->executor()->Run ..." << std::endl;
   ExecutorInstance::Instance()->executor()->Run(
       def, output, run_option,
       [&](Status st, const std::vector<Tensor>& outputs, 
@@ -110,11 +88,10 @@ ExecuteResult Execute(const GraphDef& def,
         ret.run_statistic.perf_result = it->second.AnyCast<std::string>();
       }
     }
+
     result.set_value(1);
   });
-  std::cout << "After ExecutorInstance::Instance()->executor()->Run ..." << std::endl << "Calling result.get_future().wait(), wait the thread to end?" << std::endl;
   result.get_future().wait();
-  std::cout << "End the Execute in executor_wrapper.cc" << std::endl;
   return ret;
 }
 
