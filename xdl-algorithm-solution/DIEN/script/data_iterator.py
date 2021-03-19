@@ -23,7 +23,10 @@ from tensorflow.python.lib.io import file_io
 
 
 def unicode_to_utf8(d):
-    return dict((key.encode("UTF-8"), value) for (key, value) in d.items())
+    #return dict((key.encode("UTF-8"), value) for (key, value) in d.items())
+    # in python3 we don't need to do the extra UTF-8 encode, as it's encoded as default.
+    # if we do the extra encode, the str will be changed to bytes
+    return d
 
 
 def fopen(filename, mode='r'):

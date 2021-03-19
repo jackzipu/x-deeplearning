@@ -304,7 +304,8 @@ class Model_DIEN(Model):
                 if values is None:
                     break
                 loss, acc, aux_loss, _ = values
-                add_metrics("loss", loss)
+                loss_ = loss.copy()
+                add_metrics("loss", loss_)
                 add_metrics("time", datetime.datetime.now(
                 ).strftime('%Y-%m-%d %H:%M:%S'))
 
