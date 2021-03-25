@@ -1,0 +1,39 @@
+#!/bin/bash
+echo "Update the system"
+apt-get update && apt-get -y upgrade
+
+echo "Install build tools"
+apt-get install -y build-essential gcc-5 g++-5 cmake openjdk-8-jdk curl wget git vim
+
+echo "Install other dependencies"
+apt-get install -y libaio-dev ninja-build ragel libhwloc-dev libnuma-dev libpciaccess-dev libcrypto++-dev libxml2-dev xfslibs-dev libgnutls28-dev liblz4-dev libsctp-dev libprotobuf-dev protobuf-compiler libunwind8-dev systemtap-sdt-dev libjemalloc-dev libtool libjsoncpp-dev
+
+echo "Install the boost"
+cd /tmp
+wget -O boost_1_63_0.tar.gz https://sourceforge.net/projects/boost/files/boost/1.63.0/boost_1_63_0.tar.gz
+tar zxf boost_1_63_0.tar.gz && cd boost_1_63_0
+./bootstrap.sh --prefix=/usr/local && ./b2 -j32 variant=release define=_GLIBCXX_USE_CXX11_ABI=0 install
+mkdir -p /usr/local/lib64/boost && cp -r /usr/local/lib/libboost* /usr/local/lib64/boost/
+cd ~
+
+echo "Check the python version"
+ls -l /usr/bin | grep python
+rm /usr/bin/python
+read -p 'Press enter to continue ...'
+
+echo "Install python & pip"
+apt-get install -y python3-distutils python3-dev
+echo "pip installation"
+wget https://bootstrap.pypa.io/get-pip.py
+python3.6 get-pip.py
+cd /usr/bin
+ln -s python3.6 python
+cd ~
+
+echo "Install the tensorflow & numpy"
+pip install tensorflow==1.15
+pip install numpy==1.18.5
+
+echo "Check the python version"
+ls -l /usr/bin | grep python
+read -p 'Press enter to continue ...'

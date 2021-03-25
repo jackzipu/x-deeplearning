@@ -1,4 +1,4 @@
-# Protobuf Perforamcne
+# Protobuf Performance
 This benchmark result is tested on workstation with processor of Intel® Xeon® Processor E5-2630 and 32GB RAM
 
 This table contains 3 languages' results:
@@ -9,16 +9,16 @@ This table contains 3 languages' results:
     * **reuse** - This is for reusing the same message instance for parsing.
 * **Java** - For Java there're 3 kinds of parsing/Serialization ways:
 	* **byte[]** - This is for parsing from a Byte Array.
-    * **ByteString** - This is for parsing from a 
+    * **ByteString** - This is for parsing from a
     	com.google.protobuf.ByteString.
     * **InputStream** - This is for parsing from a InputStream
 * **Python** - For Pythong there're 3 kinds of python protobuf for testing:
-	* **C++-genereated-code** - This is for using cpp generated code of the 
+	* **C++-genereated-code** - This is for using cpp generated code of the
     	proto file as dynamic linked library.
 	* **C++-reflection** - This is for using cpp reflection, which there's no
-    	generated code, but still using cpp protobuf library as dynamic linked 
+    	generated code, but still using cpp protobuf library as dynamic linked
         library.
-	* **pure-Python** - This is for pure Python version, which don't link with 
+	* **pure-Python** - This is for pure Python version, which don't link with
     	any cpp protobuf library.
 
 ## Parsing performance
@@ -301,4 +301,4 @@ This table contains 3 languages' results:
 </tr>
 </tbody></table>
 
-\* The cpp performance can be improved by using [tcmalloc](https://gperftools.github.io/gperftools/tcmalloc.html), please follow the (instruction)[https://github.com/google/protobuf/blob/master/benchmarks/README.md] to link with tcmalloc to get the faster result.
+\* The cpp performance can be improved by using [tcmalloc](https://gperftools.github.io/gperftools/tcmalloc.html), please follow the (instruction)[https://github.com/protocolbuffers/protobuf/blob/master/benchmarks/README.md] to link with tcmalloc to get the faster result.

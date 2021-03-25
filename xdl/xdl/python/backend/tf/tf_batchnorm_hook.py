@@ -30,12 +30,12 @@ BATCHNORM_TENSORS = 'batchnorm_tf_tensors'
 
 keras_layers_assgin_moving_average = BatchNormalization._assign_moving_average
 
-def assign_moving_average(self, variable, value, momentum):
+def assign_moving_average(self, variable, value, momentum, input_size):
   var_mapping = get_collection(VAR_MAPPING, cur_model_scope())
   for x in var_mapping:
     if x[1] == variable:
       add_to_collection(BATCHNORM_TENSORS, (x[0], value, momentum), cur_model_scope())
-  return keras_layers_assgin_moving_average(self, variable, value, momentum)
+  return keras_layers_assgin_moving_average(self, variable, value, momentum, input_size)
 
 BatchNormalization._assign_moving_average = assign_moving_average
 

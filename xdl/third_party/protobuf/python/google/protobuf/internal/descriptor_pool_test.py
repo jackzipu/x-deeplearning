@@ -36,7 +36,6 @@ __author__ = 'matthewtoia@google.com (Matt Toia)'
 
 import copy
 import os
-import sys
 import warnings
 
 try:
@@ -55,6 +54,8 @@ from google.protobuf.internal import factory_test1_pb2
 from google.protobuf.internal import factory_test2_pb2
 from google.protobuf.internal import file_options_test_pb2
 from google.protobuf.internal import more_messages_pb2
+from google.protobuf.internal import no_package_pb2
+from google.protobuf.internal import testing_refleaks
 from google.protobuf import descriptor
 from google.protobuf import descriptor_database
 from google.protobuf import descriptor_pool
@@ -120,7 +121,6 @@ class DescriptorPoolTestBase(object):
     self.assertIsInstance(file_desc5, descriptor.FileDescriptor)
     self.assertEqual('google/protobuf/unittest.proto',
                      file_desc5.name)
-
     # Tests the generated pool.
     assert descriptor_pool.Default().FindFileContainingSymbol(
         'google.protobuf.python.internal.Factory2Message.one_more_field')
@@ -128,6 +128,32 @@ class DescriptorPoolTestBase(object):
         'google.protobuf.python.internal.another_field')
     assert descriptor_pool.Default().FindFileContainingSymbol(
         'protobuf_unittest.TestService')
+
+    # Can find field.
+    file_desc6 = self.pool.FindFileContainingSymbol(
+        'google.protobuf.python.internal.Factory1Message.list_value')
+    self.assertIsInstance(file_desc6, descriptor.FileDescriptor)
+    self.assertEqual('google/protobuf/internal/factory_test1.proto',
+                     file_desc6.name)
+
+    # Can find top level Enum value.
+    file_desc7 = self.pool.FindFileContainingSymbol(
+        'google.protobuf.python.internal.FACTORY_1_VALUE_0')
+    self.assertIsInstance(file_desc7, descriptor.FileDescriptor)
+    self.assertEqual('google/protobuf/internal/factory_test1.proto',
+                     file_desc7.name)
+
+    # Can find nested Enum value.
+    file_desc8 = self.pool.FindFileContainingSymbol(
+        'protobuf_unittest.TestAllTypes.FOO')
+    self.assertIsInstance(file_desc8, descriptor.FileDescriptor)
+    self.assertEqual('google/protobuf/unittest.proto',
+                     file_desc8.name)
+
+    # TODO(jieluo): Add tests for no package when b/13860351 is fixed.
+
+    self.assertRaises(KeyError, self.pool.FindFileContainingSymbol,
+                      'google.protobuf.python.internal.Factory1Message.none_field')
 
   def testFindFileContainingSymbolFailure(self):
     with self.assertRaises(KeyError):
@@ -217,11 +243,10 @@ class DescriptorPoolTestBase(object):
 
   def testFindTypeErrors(self):
     self.assertRaises(TypeError, self.pool.FindExtensionByNumber, '')
+    self.assertRaises(KeyError, self.pool.FindMethodByName, '')
 
     # TODO(jieluo): Fix python to raise correct errors.
     if api_implementation.Type() == 'cpp':
-      self.assertRaises(TypeError, self.pool.FindMethodByName, 0)
-      self.assertRaises(KeyError, self.pool.FindMethodByName, '')
       error_type = TypeError
     else:
       error_type = AttributeError
@@ -231,6 +256,7 @@ class DescriptorPoolTestBase(object):
     self.assertRaises(error_type, self.pool.FindEnumTypeByName, 0)
     self.assertRaises(error_type, self.pool.FindOneofByName, 0)
     self.assertRaises(error_type, self.pool.FindServiceByName, 0)
+    self.assertRaises(error_type, self.pool.FindMethodByName, 0)
     self.assertRaises(error_type, self.pool.FindFileContainingSymbol, 0)
     if api_implementation.Type() == 'python':
       error_type = KeyError
@@ -275,11 +301,6 @@ class DescriptorPoolTestBase(object):
       self.pool.FindEnumTypeByName('Does not exist')
 
   def testFindFieldByName(self):
-    if isinstance(self, SecondaryDescriptorFromDescriptorDB):
-      if api_implementation.Type() == 'cpp':
-        # TODO(jieluo): Fix cpp extension to find field correctly
-        # when descriptor pool is using an underlying database.
-        return
     field = self.pool.FindFieldByName(
         'google.protobuf.python.internal.Factory1Message.list_value')
     self.assertEqual(field.name, 'list_value')
@@ -290,11 +311,6 @@ class DescriptorPoolTestBase(object):
       self.pool.FindFieldByName('Does not exist')
 
   def testFindOneofByName(self):
-    if isinstance(self, SecondaryDescriptorFromDescriptorDB):
-      if api_implementation.Type() == 'cpp':
-        # TODO(jieluo): Fix cpp extension to find oneof correctly
-        # when descriptor pool is using an underlying database.
-        return
     oneof = self.pool.FindOneofByName(
         'google.protobuf.python.internal.Factory2Message.oneof_field')
     self.assertEqual(oneof.name, 'oneof_field')
@@ -302,11 +318,6 @@ class DescriptorPoolTestBase(object):
       self.pool.FindOneofByName('Does not exist')
 
   def testFindExtensionByName(self):
-    if isinstance(self, SecondaryDescriptorFromDescriptorDB):
-      if api_implementation.Type() == 'cpp':
-        # TODO(jieluo): Fix cpp extension to find extension correctly
-        # when descriptor pool is using an underlying database.
-        return
     # An extension defined in a message.
     extension = self.pool.FindExtensionByName(
         'google.protobuf.python.internal.Factory2Message.one_more_field')
@@ -381,6 +392,11 @@ class DescriptorPoolTestBase(object):
     self.assertEqual(service.full_name, 'protobuf_unittest.TestService')
     with self.assertRaises(KeyError):
       self.pool.FindServiceByName('Does not exist')
+
+    method = self.pool.FindMethodByName('protobuf_unittest.TestService.Foo')
+    self.assertIs(method.containing_service, service)
+    with self.assertRaises(KeyError):
+      self.pool.FindMethodByName('protobuf_unittest.TestService.Doesnotexist')
 
   def testUserDefinedDB(self):
     db = descriptor_database.DescriptorDatabase()
@@ -514,10 +530,6 @@ class DescriptorPoolTestBase(object):
     conflict_fd = copy.deepcopy(unittest_fd)
     conflict_fd.name = 'other_file'
     if api_implementation.Type() == 'cpp':
-      try:
-        self.pool.Add(unittest_fd)
-        self.pool.Add(conflict_fd)
-      except TypeError:
         pass
     else:
       with warnings.catch_warnings(record=True) as w:
@@ -549,6 +561,7 @@ class DescriptorPoolTestBase(object):
                       str(w[0].message))
 
 
+@testing_refleaks.TestCase
 class DefaultDescriptorPoolTest(DescriptorPoolTestBase, unittest.TestCase):
 
   def setUp(self):
@@ -584,6 +597,7 @@ class DefaultDescriptorPoolTest(DescriptorPoolTestBase, unittest.TestCase):
         unittest_pb2.DESCRIPTOR.services_by_name['TestService'])
 
 
+@testing_refleaks.TestCase
 class CreateDescriptorPoolTest(DescriptorPoolTestBase, unittest.TestCase):
 
   def setUp(self):
@@ -601,8 +615,11 @@ class CreateDescriptorPoolTest(DescriptorPoolTestBase, unittest.TestCase):
         unittest_import_pb2.DESCRIPTOR.serialized_pb))
     self.pool.Add(descriptor_pb2.FileDescriptorProto.FromString(
         unittest_pb2.DESCRIPTOR.serialized_pb))
+    self.pool.Add(descriptor_pb2.FileDescriptorProto.FromString(
+        no_package_pb2.DESCRIPTOR.serialized_pb))
 
 
+@testing_refleaks.TestCase
 class SecondaryDescriptorFromDescriptorDB(DescriptorPoolTestBase,
                                           unittest.TestCase):
 
@@ -620,6 +637,8 @@ class SecondaryDescriptorFromDescriptorDB(DescriptorPoolTestBase,
         unittest_import_pb2.DESCRIPTOR.serialized_pb))
     db.Add(descriptor_pb2.FileDescriptorProto.FromString(
         unittest_pb2.DESCRIPTOR.serialized_pb))
+    db.Add(descriptor_pb2.FileDescriptorProto.FromString(
+        no_package_pb2.DESCRIPTOR.serialized_pb))
     self.pool = descriptor_pool.DescriptorPool(descriptor_db=db)
 
 
@@ -746,11 +765,7 @@ class MessageField(object):
     test.assertEqual(msg_desc, field_desc.containing_type)
     test.assertEqual(field_type_desc, field_desc.message_type)
     test.assertEqual(file_desc, field_desc.file)
-    # TODO(jieluo): Fix python and cpp extension diff for message field
-    # default value.
-    if api_implementation.Type() == 'cpp':
-      test.assertRaises(
-          NotImplementedError, getattr, field_desc, 'default_value')
+    test.assertEqual(field_desc.default_value, None)
 
 
 class StringField(object):
@@ -798,6 +813,7 @@ class ExtensionField(object):
     test.assertEqual(file_desc, field_desc.file)
 
 
+@testing_refleaks.TestCase
 class AddDescriptorTest(unittest.TestCase):
 
   def _TestMessage(self, prefix):

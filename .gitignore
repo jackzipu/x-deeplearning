@@ -1,0 +1,15 @@
+xdl/third_party/
+xdl-algorithm-solution/DIEN/data/cat_voc.pkl
+xdl-algorithm-solution/DIEN/data/dien/
+xdl-algorithm-solution/DIEN/data/item-info
+xdl-algorithm-solution/DIEN/data/local_test_splitByUser
+xdl-algorithm-solution/DIEN/data/local_train_splitByUser
+xdl-algorithm-solution/DIEN/data/mid_voc.pkl
+xdl-algorithm-solution/DIEN/data/reviews-info
+xdl-algorithm-solution/DIEN/data/uid_voc.pkl
+xdl-algorithm-solution/DIEN/script/2
+xdl-algorithm-solution/DIEN/script/__pycache__/
+xdl-algorithm-solution/DIEN/script/ckpt_dir/
+xdl/build/
+xdl/test/util/hdfs_define.h
+xdl/test/util/zookeeper_define.h
