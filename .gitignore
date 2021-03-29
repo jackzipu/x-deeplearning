@@ -1,4 +1,3 @@
-xdl/third_party/
 xdl-algorithm-solution/DIEN/data/cat_voc.pkl
 xdl-algorithm-solution/DIEN/data/dien/
 xdl-algorithm-solution/DIEN/data/item-info
@@ -13,3 +12,11 @@ xdl-algorithm-solution/DIEN/script/ckpt_dir/
 xdl/build/
 xdl/test/util/hdfs_define.h
 xdl/test/util/zookeeper_define.h
+xdl/third_party/seastar/service/build_script/CMakeCache.txt
+xdl/third_party/seastar/service/build_script/CMakeFiles/
+xdl/third_party/seastar/service/build_script/Makefile
+xdl/third_party/seastar/service/build_script/cmake_install.cmake
+xdl/third_party/seastar/service/build_script/libps_network_shared.so
+xdl/third_party/seastar/service/build_script/libps_network_static.a
+xdl/third_party/status.log
+

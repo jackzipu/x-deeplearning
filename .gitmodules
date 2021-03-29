@@ -31,3 +31,7 @@
 [submodule "xdl-algorithm-solution/TDM/src/third_party/glog"]
 	path = xdl-algorithm-solution/TDM/src/third_party/glog
 	url = https://github.com/google/glog
+[submodule "xdl/third_party/protobuf"]
+	path = xdl/third_party/protobuf
+	url = git@github.com:protocolbuffers/protobuf.git
+	branch = 3.8.x
