@@ -48,12 +48,7 @@ include_directories(
 
 include(cmake/Dependencies.cmake)
 
-set(TBB_ROOT "${PROJECT_SOURCE_DIR}/third_party/tbb/")
-include(${TBB_ROOT}/cmake/TBBBuild.cmake)
-set(CMAKE_CXX_FLAGS "-std=c++1y ${CMAKE_CXX_FLAGS}")
-tbb_build(TBB_ROOT ${TBB_ROOT} CONFIG_DIR TBB_DIR MAKE_ARGS)
 find_package(TBB REQUIRED)
-include_directories("${TBB_ROOT}/include")
 
 IF (USE_GPU)
    set(CUDA_PATH "/usr/local/cuda-9.0/")

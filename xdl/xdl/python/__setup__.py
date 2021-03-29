@@ -29,18 +29,6 @@ class PostCmd(install):
   def run(self):
     dir_name = os.path.dirname(os.path.abspath(__file__))
     self.spawn(['cp', os.path.join(dir_name, '../third_party/librdkafka/src/librdkafka.so'), '/usr/lib/'])
-    self.spawn(['cp', os.path.join(dir_name, "../../build/tbb_cmake_build/tbb_cmake_build_subdir_release/libtbbmalloc_proxy.so.2"), '/lib/'])
-    self.spawn(['cp', os.path.join(dir_name, "../../build/tbb_cmake_build/tbb_cmake_build_subdir_release/libtbbmalloc_proxy.so"), '/lib/'])
-    self.spawn(['cp', os.path.join(dir_name, "../../build/tbb_cmake_build/tbb_cmake_build_subdir_release/libtbb.so.2"), '/lib/'])
-    self.spawn(['cp', os.path.join(dir_name, "../../build/tbb_cmake_build/tbb_cmake_build_subdir_release/libtbb.so"), '/lib/'])
-    self.spawn(['cp', os.path.join(dir_name, "../../build/tbb_cmake_build/tbb_cmake_build_subdir_release/libtbbmalloc.so.2"), '/lib/'])
-    self.spawn(['cp', os.path.join(dir_name, "../../build/tbb_cmake_build/tbb_cmake_build_subdir_release/libtbbmalloc.so"), '/lib/'])
-    self.spawn(['cp', os.path.join(dir_name, "../../build/tbb_cmake_build/tbb_cmake_build_subdir_debug/libtbbmalloc_proxy_debug.so.2"), '/lib/'])
-    self.spawn(['cp', os.path.join(dir_name, "../../build/tbb_cmake_build/tbb_cmake_build_subdir_debug/libtbbmalloc_proxy_debug.so"), '/lib/'])
-    self.spawn(['cp', os.path.join(dir_name, "../../build/tbb_cmake_build/tbb_cmake_build_subdir_debug/libtbb_debug.so.2"), '/lib/'])
-    self.spawn(['cp', os.path.join(dir_name, "../../build/tbb_cmake_build/tbb_cmake_build_subdir_debug/libtbb_debug.so"), '/lib/'])
-    self.spawn(['cp', os.path.join(dir_name, "../../build/tbb_cmake_build/tbb_cmake_build_subdir_debug/libtbbmalloc_debug.so.2"), '/lib/'])
-    self.spawn(['cp', os.path.join(dir_name, "../../build/tbb_cmake_build/tbb_cmake_build_subdir_debug/libtbbmalloc_debug.so"), '/lib/'])        
     install.run(self)
 
 def find_package_data():
