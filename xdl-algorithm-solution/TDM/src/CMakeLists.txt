@@ -3,7 +3,7 @@ project(dist_tree)
 
 include(FindPythonAnaconda.cmake)
 
-add_definitions(-std=c++1y -D_GLIBCXX_USE_CXX11_ABI=0)
+add_definitions(-std=c++1y -D_GLIBCXX_USE_CXX11_ABI=1)
 set(CMAKE_CXX_FLAGS "-O3 -g -fPIC")
 set(CMAKE_POSITION_INDEPENDENT_CODE TRUE)
 

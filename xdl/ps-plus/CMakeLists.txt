@@ -2,9 +2,9 @@ cmake_minimum_required(VERSION 3.0.0 FATAL_ERROR)
 project(ps-plus)
 
 if (DEBUG)
-   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -fPIC -std=c++1y -D_GLIBCXX_USE_CXX11_ABI=0")
+   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -fPIC -std=c++1y -D_GLIBCXX_USE_CXX11_ABI=1")
 else ()
-   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -fPIC -std=c++1y -g -DNDEBUG -D_GLIBCXX_USE_CXX11_ABI=0")
+   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -fPIC -std=c++1y -g -DNDEBUG -D_GLIBCXX_USE_CXX11_ABI=1")
 endif ()
 
 if (APPLE)
@@ -27,7 +27,7 @@ list(LENGTH ARGV  argv_len)
     while( i LESS ${argv_len})
         list(GET ARGV ${i} argv_value)
         message(STATUS "start build third_party library:${argv_value}")
-        execute_process(COMMAND bash -c "cd ${PROJECT_SOURCE_DIR}/third_party/${argv_value}; mkdir -p build; cd build; cmake .. -DCMAKE_INSTALL_PREFIX=. -DCMAKE_CXX_FLAGS=-D_GLIBCXX_USE_CXX11_ABI=0; make; make install; cd ${PROJECT_SOURCE_DIR}")
+        execute_process(COMMAND bash -c "cd ${PROJECT_SOURCE_DIR}/third_party/${argv_value}; mkdir -p build; cd build; cmake .. -DCMAKE_INSTALL_PREFIX=. -DCMAKE_CXX_FLAGS=-D_GLIBCXX_USE_CXX11_ABI=1; make; make install; cd ${PROJECT_SOURCE_DIR}")
         IF(EXISTS "${PROJECT_SOURCE_DIR}/third_party/${argv_value}/build/include")
           include_directories("${PROJECT_SOURCE_DIR}/third_party/${argv_value}/build/include")
         ENDIF()
@@ -51,7 +51,7 @@ function (third_party_library_builder_autotools arg)
 	execute_process(COMMAND bash -c "
 	    cd ${PROJECT_SOURCE_DIR}/third_party/${argv_value};
             mkdir -p build;
-            ./configure --prefix=$(pwd)/build CXXFLAGS='-D_GLIBCXX_USE_CXX11_ABI=0' LDFLAGS='-D_GLIBCXX_USE_CXX11_ABI=0';
+            ./configure --prefix=$(pwd)/build CXXFLAGS='-D_GLIBCXX_USE_CXX11_ABI=1' LDFLAGS='-D_GLIBCXX_USE_CXX11_ABI=1';
             make;
             make install;
             cd ${PROJECT_SOURCE_DIR}")

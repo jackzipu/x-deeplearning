@@ -19,7 +19,7 @@ message(STATUS "WITH_DEBUG_SYMBOLS=${WITH_DEBUG_SYMBOLS}")
 message(STATUS "CMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}")
 
 set(CMAKE_BUILD_TYPE "Release")
-set(CMAKE_CXX_FLAGS "-Wall -W -fPIC -Wno-unused-but-set-variable -std=c++11 -D_GLIBCXX_USE_CXX11_ABI=0 -fopenmp")
+set(CMAKE_CXX_FLAGS "-Wall -W -fPIC -Wno-unused-but-set-variable -std=c++11 -D_GLIBCXX_USE_CXX11_ABI=1 -fopenmp")
 set(CMAKE_CXX_FLAGS_DEBUG " -O0")
 set(CMAKE_CXX_FLAGS_RELEASE " -O2 -DNDEBUG")
 

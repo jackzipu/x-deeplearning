@@ -1,7 +1,7 @@
 project(sample_generator)
 cmake_minimum_required (VERSION 2.8)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ftree-vectorize -std=c++1y -Wcpp -fPIC -D_GLIBCXX_USE_CXX11_ABI=0 -O2 -g -pipe -fopenmp -DNDEBUG")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ftree-vectorize -std=c++1y -Wcpp -fPIC -D_GLIBCXX_USE_CXX11_ABI=1 -O2 -g -pipe -fopenmp -DNDEBUG")
 
 # GOOGLE PROTOBUF
 set(PROTOBUF_VERSION "protobuf-3.5.0")
