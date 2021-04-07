@@ -1,0 +1,34 @@
+#!/bin/bash
+if [ -z $POPLAR_SDK_ENABLED ]; then
+    echo "Please ensure you have set up the POPLAR env ..."
+    exit 1
+fi
+
+#cd ~
+#echo "Download the codes from github..."
+#git clone --recursive git@github.com:jackzipu/x-deeplearning.git -b 18.04-tf1.15
+
+echo "Make the build folder..."
+cd xdl
+mkdir -p build
+cd build
+rm -rf *
+
+echo "set the compiler..."
+export CC=/usr/bin/gcc-5 && export CXX=/usr/bin/g++-5
+
+echo "run the cmake..."
+cmake .. -DTF_BACKEND=1
+
+read -p "Please check the cmake result, and press enter to continue if there's not any problem ..."
+
+echo "run make..."
+make -j32
+
+read -p "Please check the make result, and press enter to continue if there's not any problem ..."
+
+echo "Install..."
+make install_python_lib
+
+echo "Please run export LD_LIBRARY_PATH=/usr/local/lib:\$LD_LIBRARY_PATH"
+echo "    if encounter problem: ImportError: libboost_program_options.so.1.63.0: cannot open shared object file: No such file or directory"

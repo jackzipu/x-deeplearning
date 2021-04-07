@@ -42,6 +42,7 @@ from xdl.python.training import trace
 import xdl.python.backend.tf.tf_hook
 from xdl.python.backend.tf import tf_batchnorm_hook
 from xdl.python.backend.backend_type import set_backend_type
+from xdl.python.backend.tf.tf_ipu import tf_ipu_graph
 
 """python adapter for tensorflow."""
 
@@ -125,6 +126,10 @@ def serialize_graph(clear_devices=False, as_text=False, model_scope=''):
   cur_graph = _TF_GRAPH_DICT[model_scope]
   if cur_graph is None:
     raise ValueError('get tf graph under model scope[%s] failed!' % model_scope)
+  
+  # add ipu specified information to the grahp
+  cur_graph = tf_ipu_graph(cur_graph)
+
   with cur_graph.as_default():
     saver = tf_saver.Saver(
       variables._all_saveable_objects(),
