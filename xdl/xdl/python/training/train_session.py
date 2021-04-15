@@ -318,6 +318,7 @@ class LoggerHook(Hook):
         for i in range(len(v)):
             msg = msg.replace("{%d}" % i, str(v[i]))
         print(msg)
+        raise OutOfRange("WorkerFinished")
 
 class SimpleSession(object):
     def __init__(self, hooks=None):

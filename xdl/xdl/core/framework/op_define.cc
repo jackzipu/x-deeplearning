@@ -17,9 +17,11 @@ limitations under the License.
 
 #include <vector>
 #include <iostream>
+#include <stdio.h>
 
 namespace xdl {
 void OpDefine::DefineOp(const std::string& name, OpDefineItem* item) {
+  printf("------> OpDefine::DefineOp with name: %s.\n", name.c_str());
   item->status = ValidateDef(item);
   if (!item->status.IsOk()) {
     std::cerr << "Error On Define Op " << name << std::endl
@@ -31,6 +33,7 @@ void OpDefine::DefineOp(const std::string& name, OpDefineItem* item) {
     //abort();
   }
   definitions_[name].reset(item);
+  printf("<------ OpDefine::DefineOp with name: %s.\n", name.c_str());
 }
 
 std::unordered_map<std::string, OpDefineItem*> OpDefine::GetDefinitions() {

@@ -20,6 +20,7 @@ limitations under the License.
 #include <thread>
 #include <dlfcn.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 namespace xdl {
 
@@ -67,12 +68,13 @@ Status TFRunner::Run(const InputList &inputs,
                      const std::vector<std::string> &ops_names,
                      std::vector<tensorflow::Tensor>* outputs) {
   tensorflow::Status status;
+  printf("@@@@@@@@@@@@@@@@@@ before the TFRunner::Run().session_->Run()\n");
   status = session_->Run(inputs, ops_names, {}, outputs);
   if (!status.ok()) {
     return Status::Internal("tf session run failed, errormsg:" + 
                             status.error_message());
   }
-  
+  printf("@@@@@@@@@@@@@@@@@@ after the TFRunner::Run().session_->Run()\n");
   return Status::Ok();
 }
 

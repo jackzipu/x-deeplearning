@@ -224,6 +224,7 @@ def tf_wrapper(is_training=True, init_grad=None, gpu_memory_fraction=0.5, device
   """
   def decorator(model_func):
     def _wrapper(*inputs, **kwargs):
+      print('@@@@@@@@@@@@@@@@@@@@@@@@@ =======> tf_wrapper')
       global _TF_GRAPH_DICT
       model_scope = cur_model_scope()
       if model_scope not in _TF_GRAPH_DICT:
@@ -318,6 +319,7 @@ def tf_wrapper(is_training=True, init_grad=None, gpu_memory_fraction=0.5, device
         else:
           batchnorm_output = outputs[-(trace_size+batchnorm_size):]
         tf_batchnorm_hook.set_tf_output(batchnorm_output)
+        print('@@@@@@@@@@@@@@@@@@@@@@@@@ <======= tf_wrapper')
         return outputs if (trace_size == 0 and batchnorm_size == 0) else outputs[:-(trace_size + batchnorm_size)]
     return _wrapper
   return decorator

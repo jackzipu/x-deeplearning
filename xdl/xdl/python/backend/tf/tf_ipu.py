@@ -40,7 +40,8 @@ def _add_ipu_scope(node):
         attr_value_pb2.AttrValue(b=False))
 
 #node_blacklist = [".*Initializer.*", "^dense.{0,2}/kernel$", "^dense.{0,2}/kernel/Assign$", "^dense.{0,2}/kernel/read$",]
-node_blacklist = []
+#node_blacklist = []
+node_blacklist = [".*Initializer.*", "^dense.{0,2}/kernel$", "^dense.{0,2}/kernel/Assign$", "^dense.{0,2}/kernel/read$", "^dense.{0,2}/kernel$", "^dense.{0,2}/bias$", "^dense.{0,2}/bias/Assign$"]
 def _should_do_placement(node):
     global node_blacklist
     for pattern in node_blacklist:

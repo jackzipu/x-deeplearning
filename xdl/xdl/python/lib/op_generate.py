@@ -278,6 +278,7 @@ def op_generate(opdef):
 
   builder.append_stmt("result_func = {0}", func_name)
 
+  #print(f'--------------------------------The statement is: \n{builder.get_stmts()}\n---------------------------------\n')
   exec(builder.get_stmts(), globals())
   _func_code[opdef.name] = builder.get_numbered_stmts()
   _op_def[opdef.name] = opdef
@@ -285,10 +286,13 @@ def op_generate(opdef):
   return func_name, result_func
 
 def generate_module(name):
+  print(f'=============> Now we called the generate_module in the op_generate.py with name {name}')
   ret = types.ModuleType(name)
   for opdef in pybind.GetLatestOpDefineItem():
     name, op = op_generate(opdef)
+    print(f'The ops defined with name: {name}, op: {op}')
     setattr(ret, name, op)
+  print(f'<============ Leaving the generate_module with name {name}')
   return ret
 
 def load_op_library(file_name):

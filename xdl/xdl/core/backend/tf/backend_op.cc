@@ -23,12 +23,14 @@ limitations under the License.
 #include "xdl/core/ops/ps_ops/define_op.h"
 #include "xdl/core/backend/tf/tf_runner.h"
 #include "xdl/core/backend/tf/convert_utils.h"
+#include <stdio.h>
 
 namespace xdl {
 
 class TFBackendOp : public xdl::OpKernelAsync {
  public:
   Status Init(OpKernelConstruction* ctx) {
+    printf("======> TFBackendOp::Init() called\n");
     std::string input_op_name;
     std::string target_op_name;
     std::string gradient_op_name;
@@ -46,6 +48,7 @@ class TFBackendOp : public xdl::OpKernelAsync {
     local_init_op_names_ = StringUtils::split(local_init_op_name, ",");
     XDL_CHECK_STATUS(tf_runner_.Init(graph_def_, gpu_memory_fraction));
     XDL_CHECK_STATUS(InitLocalVariables());
+    printf("<====== TFBackendOp::Init() exit\n");
     return Status::Ok();
   }
 
@@ -60,6 +63,7 @@ class TFBackendOp : public xdl::OpKernelAsync {
   }
 
   void Compute(OpKernelContext* ctx, Callback done) override {
+    printf("======> TFBackendOp::Compute() called\n");
     using TensorList = std::vector<Tensor>;
     TensorList inputs;
     XDL_CHECK_STATUS_ASYNC(ctx->GetInputList("inputs", &inputs), done);
@@ -108,6 +112,7 @@ class TFBackendOp : public xdl::OpKernelAsync {
 
     ctx->SetOutputList("gradients", gradients);
     done(Status::Ok());
+    printf("<====== TFBackendOp::Compute() exit\n");
   }
 
  private:
